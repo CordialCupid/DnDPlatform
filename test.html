@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DnD Platform Tester</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: monospace; background: #1a1a2e; color: #e0e0e0; display: flex; height: 100vh; }
+
+    #sidebar {
+      width: 220px; background: #16213e; padding: 16px; display: flex; flex-direction: column; gap: 4px;
+      border-right: 1px solid #0f3460;
+    }
+    #sidebar h2 { color: #e94560; margin-bottom: 12px; font-size: 14px; letter-spacing: 1px; }
+    .nav-group { color: #888; font-size: 10px; text-transform: uppercase; margin: 10px 0 4px; }
+    .nav-btn {
+      background: none; border: none; color: #ccc; text-align: left; padding: 6px 8px;
+      cursor: pointer; border-radius: 4px; font-family: monospace; font-size: 12px; width: 100%;
+    }
+    .nav-btn:hover { background: #0f3460; color: #fff; }
+    .nav-btn.active { background: #e94560; color: #fff; }
+
+    #token-bar {
+      padding: 8px 16px; background: #0f3460; font-size: 11px; display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid #16213e;
+    }
+    #token-bar span { color: #888; }
+    #token-display { color: #4ecca3; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+    #panel {
+      flex: 1; padding: 24px; overflow-y: auto;
+    }
+    #panel h1 { font-size: 16px; color: #e94560; margin-bottom: 20px; }
+
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 11px; color: #888; margin-bottom: 4px; }
+    input, textarea, select {
+      width: 100%; background: #16213e; border: 1px solid #0f3460; color: #e0e0e0;
+      padding: 8px 10px; border-radius: 4px; font-family: monospace; font-size: 13px;
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    input:focus, textarea:focus { outline: none; border-color: #e94560; }
+
+    button.action {
+      background: #e94560; color: #fff; border: none; padding: 8px 20px;
+      border-radius: 4px; cursor: pointer; font-family: monospace; font-size: 13px;
+    }
+    button.action:hover { background: #c73652; }
+    button.secondary {
+      background: #0f3460; color: #ccc; border: none; padding: 6px 14px;
+      border-radius: 4px; cursor: pointer; font-family: monospace; font-size: 12px;
+    }
+    button.secondary:hover { background: #1a4a8a; }
+
+    #response-bar {
+      height: 260px; background: #0d0d1a; border-top: 1px solid #0f3460;
+      display: flex; flex-direction: column;
+    }
+    #response-header {
+      padding: 6px 16px; background: #16213e; font-size: 11px; color: #888;
+      display: flex; align-items: center; gap: 12px;
+    }
+    #status-badge {
+      padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: bold;
+    }
+    .status-ok { background: #1a4a2e; color: #4ecca3; }
+    .status-err { background: #4a1a1a; color: #e94560; }
+    #response-body {
+      flex: 1; overflow-y: auto; padding: 12px 16px;
+      font-size: 12px; line-height: 1.6; white-space: pre-wrap; color: #b0c4de;
+    }
+
+    .row { display: flex; gap: 12px; }
+    .row .form-group { flex: 1; }
+  </style>
+</head>
+<body>
+
+<div id="sidebar">
+  <h2>DnD Platform</h2>
+
+  <div class="nav-group">Auth</div>
+  <button class="nav-btn active" onclick="show('register')">Register</button>
+  <button class="nav-btn" onclick="show('login')">Login</button>
+
+  <div class="nav-group">Me</div>
+  <button class="nav-btn" onclick="show('me')">GET /me</button>
+
+  <div class="nav-group">Templates</div>
+  <button class="nav-btn" onclick="show('templates-list')">List Templates</button>
+  <button class="nav-btn" onclick="show('templates-create')">Create Template</button>
+
+  <div class="nav-group">Characters</div>
+  <button class="nav-btn" onclick="show('characters-list')">List Characters</button>
+  <button class="nav-btn" onclick="show('characters-create')">Create Character</button>
+  <button class="nav-btn" onclick="show('characters-get')">Get Character</button>
+  <button class="nav-btn" onclick="show('characters-sheet')">Save Sheet</button>
+  <button class="nav-btn" onclick="show('characters-snapshot')">Snapshot</button>
+  <button class="nav-btn" onclick="show('characters-versions')">Version History</button>
+  <button class="nav-btn" onclick="show('characters-delete')">Delete Character</button>
+</div>
+
+<div id="main">
+  <div id="token-bar">
+    <span>Token:</span>
+    <div id="token-display">not logged in</div>
+    <button class="secondary" onclick="clearToken()">Clear</button>
+  </div>
+
+  <div id="panel">
+    <!-- panels injected here -->
+  </div>
+
+  <div id="response-bar">
+    <div id="response-header">
+      <span>Response</span>
+      <span id="status-badge">—</span>
+      <span id="response-time" style="margin-left:auto"></span>
+    </div>
+    <div id="response-body">Hit a request to see the response.</div>
+  </div>
+</div>
+
+<script>
+const BASE = 'http://localhost:5024/api';
+let token = localStorage.getItem('dnd_token') || '';
+updateTokenBar();
+
+const panels = {
+  register: `
+    <h1>POST /auth/register</h1>
+    <div class="form-group"><label>Username</label><input id="reg-username" value="testuser"></div>
+    <div class="form-group"><label>Email</label><input id="reg-email" value="test@example.com"></div>
+    <div class="form-group"><label>Password</label><input id="reg-password" type="password" value="Password123!"></div>
+    <button class="action" onclick="register()">Register</button>`,
+
+  login: `
+    <h1>POST /auth/login</h1>
+    <div class="form-group"><label>Username</label><input id="login-username" value="testuser"></div>
+    <div class="form-group"><label>Password</label><input id="login-password" type="password" value="Password123!"></div>
+    <button class="action" onclick="login()">Login & Save Token</button>`,
+
+  me: `
+    <h1>GET /me</h1>
+    <p style="color:#888;font-size:12px;margin-bottom:16px">Returns the currently authenticated user's ID and username.</p>
+    <button class="action" onclick="req('GET','/me')">Send</button>`,
+
+  'templates-list': `
+    <h1>GET /templates</h1>
+    <div class="form-group"><label>System filter (optional)</label><input id="tmpl-system" placeholder="e.g. dnd5e"></div>
+    <button class="action" onclick="listTemplates()">Send</button>`,
+
+  'templates-create': `
+    <h1>POST /templates</h1>
+    <div class="form-group"><label>Name</label><input id="tc-name" value="Basic D&D 5e Sheet"></div>
+    <div class="form-group"><label>System</label><input id="tc-system" value="dnd5e"></div>
+    <div class="form-group"><label>Fields JSON (array)</label>
+      <textarea id="tc-fields">[
+  { "name": "strength", "label": "Strength", "type": "Number", "required": true },
+  { "name": "class", "label": "Class", "type": "Text", "required": true }
+]</textarea></div>
+    <button class="action" onclick="createTemplate()">Create</button>`,
+
+  'characters-list': `
+    <h1>GET /characters</h1>
+    <button class="action" onclick="req('GET','/characters')">Send</button>`,
+
+  'characters-create': `
+    <h1>POST /characters</h1>
+    <div class="form-group"><label>Name</label><input id="cc-name" value="Aragorn"></div>
+    <div class="form-group"><label>Template ID</label><input id="cc-template" placeholder="paste template GUID"></div>
+    <button class="action" onclick="createCharacter()">Create</button>`,
+
+  'characters-get': `
+    <h1>GET /characters/:id</h1>
+    <div class="form-group"><label>Character ID</label><input id="cg-id" placeholder="paste character GUID"></div>
+    <button class="action" onclick="req('GET','/characters/'+v('cg-id'))">Send</button>`,
+
+  'characters-sheet': `
+    <h1>PUT /characters/:id/sheet</h1>
+    <div class="form-group"><label>Character ID</label><input id="cs-id" placeholder="paste character GUID"></div>
+    <div class="form-group"><label>Sheet Data (JSON object)</label>
+      <textarea id="cs-data">{ "strength": 18, "class": "Ranger" }</textarea></div>
+    <button class="action" onclick="saveSheet()">Save Sheet</button>`,
+
+  'characters-snapshot': `
+    <h1>POST /characters/:id/snapshot</h1>
+    <div class="form-group"><label>Character ID</label><input id="snap-id" placeholder="paste character GUID"></div>
+    <div class="form-group"><label>Label</label><input id="snap-label" value="Level 5 checkpoint"></div>
+    <button class="action" onclick="createSnapshot()">Create Snapshot</button>`,
+
+  'characters-versions': `
+    <h1>GET /characters/:id/versions</h1>
+    <div class="form-group"><label>Character ID</label><input id="ver-id" placeholder="paste character GUID"></div>
+    <button class="action" onclick="req('GET','/characters/'+v('ver-id')+'/versions')">Send</button>`,
+
+  'characters-delete': `
+    <h1>DELETE /characters/:id</h1>
+    <div class="form-group"><label>Character ID</label><input id="del-id" placeholder="paste character GUID"></div>
+    <button class="action" onclick="req('DELETE','/characters/'+v('del-id'))">Delete</button>`,
+};
+
+function show(name) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel').innerHTML = panels[name];
+}
+
+function v(id) { return document.getElementById(id)?.value ?? ''; }
+
+function updateTokenBar() {
+  document.getElementById('token-display').textContent = token
+    ? token.substring(0, 60) + '...'
+    : 'not logged in';
+}
+
+function clearToken() {
+  token = '';
+  localStorage.removeItem('dnd_token');
+  updateTokenBar();
+}
+
+async function req(method, path, body) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (token) headers['Authorization'] = 'Bearer ' + token;
+  const t0 = Date.now();
+  let res, data;
+  try {
+    res = await fetch(BASE + path, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined
+    });
+    const text = await res.text();
+    try { data = JSON.parse(text); } catch { data = text; }
+  } catch (e) {
+    showResponse(null, { error: e.message }, 0);
+    return;
+  }
+  showResponse(res.status, data, Date.now() - t0);
+  return data;
+}
+
+function showResponse(status, data, ms) {
+  const badge = document.getElementById('status-badge');
+  badge.textContent = status ?? 'ERROR';
+  badge.className = 'status-badge ' + (status >= 200 && status < 300 ? 'status-ok' : 'status-err');
+  document.getElementById('response-time').textContent = ms ? ms + 'ms' : '';
+  document.getElementById('response-body').textContent =
+    typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+}
+
+async function register() {
+  await req('POST', '/auth/register', {
+    username: v('reg-username'),
+    email: v('reg-email'),
+    password: v('reg-password')
+  });
+}
+
+async function login() {
+  const data = await req('POST', '/auth/login', {
+    username: v('login-username'),
+    password: v('login-password')
+  });
+  if (data?.token) {
+    token = data.token;
+    localStorage.setItem('dnd_token', token);
+    updateTokenBar();
+  }
+}
+
+async function listTemplates() {
+  const sys = v('tmpl-system');
+  await req('GET', '/templates' + (sys ? '?system=' + sys : ''));
+}
+
+async function createTemplate() {
+  let fields;
+  try { fields = JSON.parse(v('tc-fields')); }
+  catch { showResponse(400, { error: 'Invalid JSON in fields' }, 0); return; }
+  await req('POST', '/templates', { name: v('tc-name'), system: v('tc-system'), fields });
+}
+
+async function createCharacter() {
+  await req('POST', '/characters', { name: v('cc-name'), templateId: v('cc-template') });
+}
+
+async function saveSheet() {
+  let data;
+  try { data = JSON.parse(v('cs-data')); }
+  catch { showResponse(400, { error: 'Invalid JSON in sheet data' }, 0); return; }
+  await req('PUT', '/characters/' + v('cs-id') + '/sheet', { sheetData: data });
+}
+
+async function createSnapshot() {
+  await req('POST', '/characters/' + v('snap-id') + '/snapshot', { label: v('snap-label') });
+}
+
+// Init
+document.getElementById('panel').innerHTML = panels['register'];
+</script>
+</body>
+</html>
