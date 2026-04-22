@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "DnDPlatform.Frontend",
   "resources": {
-    "hash": "sha256-6FlQd/e6jkhc3Ubu5FO4bkKww9BfYDzLTTb54R2djIs=",
+    "hash": "sha256-YNtPtdjE5z0i4dsGUTlQeJ77N+8weAuL6DxQtsXH76o=",
     "fingerprinting": {
       "Microsoft.AspNetCore.Authorization.50odlujk1g.wasm": "Microsoft.AspNetCore.Authorization.wasm",
       "Microsoft.AspNetCore.Components.nxuc56wpt2.wasm": "Microsoft.AspNetCore.Components.wasm",
@@ -199,23 +199,23 @@
       "netstandard.6sr1qvn64m.wasm": "netstandard.wasm",
       "System.Private.CoreLib.tn7ijpxcub.wasm": "System.Private.CoreLib.wasm",
       "dotnet.js": "dotnet.js",
-      "dotnet.native.l4ptthxatg.js": "dotnet.native.js",
-      "dotnet.native.d2w7colv7e.wasm": "dotnet.native.wasm",
-      "dotnet.runtime.drv0pr9n5o.js": "dotnet.runtime.js",
+      "dotnet.native.noby4tlk4d.js": "dotnet.native.js",
+      "dotnet.native.qe75a9vfqn.wasm": "dotnet.native.wasm",
+      "dotnet.runtime.9o45ky8ejm.js": "dotnet.runtime.js",
       "icudt_CJK.tjcz0u77k5.dat": "icudt_CJK.dat",
       "icudt_EFIGS.tptq2av103.dat": "icudt_EFIGS.dat",
       "icudt_no_CJK.lfu7j35m59.dat": "icudt_no_CJK.dat",
-      "DnDPlatform.Frontend.5ffnv12ih2.wasm": "DnDPlatform.Frontend.wasm",
-      "DnDPlatform.Frontend.c00w2t2zbq.pdb": "DnDPlatform.Frontend.pdb"
+      "DnDPlatform.Frontend.25rr8tcsq4.wasm": "DnDPlatform.Frontend.wasm",
+      "DnDPlatform.Frontend.je4rb9wc1n.pdb": "DnDPlatform.Frontend.pdb"
     },
     "jsModuleNative": {
-      "dotnet.native.l4ptthxatg.js": "sha256-ddUN4+taa/Qv7Mr8mLpunJO+0Xw3ViOqBvedhe57/hA="
+      "dotnet.native.noby4tlk4d.js": "sha256-p9eEzXhQIsI0a5bBJhfzW15iRafgplTxT8XrO5FiH9o="
     },
     "jsModuleRuntime": {
-      "dotnet.runtime.drv0pr9n5o.js": "sha256-yfXUv1l/B489E8p12JxUvxly0JvHL9CCsoZUDlfGH9c="
+      "dotnet.runtime.9o45ky8ejm.js": "sha256-6QIZYgG+ftoT9N1H1EEJeXIhD/qbKqEcnmawDskiwdI="
     },
     "wasmNative": {
-      "dotnet.native.d2w7colv7e.wasm": "sha256-62UC3VfSQyaGpPUm7iSjBYuQ1xD31WdRYY20NQ1K+Vs="
+      "dotnet.native.qe75a9vfqn.wasm": "sha256-Po2dalLvTpf5jAS+jt0TzuBYybYiL1F6qAacZJ8UAdo="
     },
     "icu": {
       "icudt_CJK.tjcz0u77k5.dat": "sha256-SZLtQnRc0JkwqHab0VUVP7T3uBPSeYzxzDnpxPpUnHk=",
@@ -420,10 +420,10 @@
       "WindowsBase.ahs9krftg4.wasm": "sha256-bgi2FHdT0ABsUP1yKQQ2AP8qfo1V/bS/4cJFE4OUHX8=",
       "mscorlib.k5iaovx9v7.wasm": "sha256-mEFLDERlY1HMNQHzh68xOPawXvI48O1fHW9PbfXugb4=",
       "netstandard.6sr1qvn64m.wasm": "sha256-Gpf+qEqCYaCB6zqI5sNPIurnfpwRtfcWksgf3CW6mHE=",
-      "DnDPlatform.Frontend.5ffnv12ih2.wasm": "sha256-0XCdlhPIXURHlmq0nJijOT7srQrZSvEyajDJO1gyCEc="
+      "DnDPlatform.Frontend.25rr8tcsq4.wasm": "sha256-Jh5jTcOMtlVcAL9WJlpTxlFL58PrR8HHlwQ5+DuxxwY="
     },
     "pdb": {
-      "DnDPlatform.Frontend.c00w2t2zbq.pdb": "sha256-DH5i5zc0aBB3Zm1TcZ8UzIaNShoWU9l4Yvw6aSNu0YA="
+      "DnDPlatform.Frontend.je4rb9wc1n.pdb": "sha256-C/4GG6V/8/JyXa7NESZKT0igbud2rlHMVGvK2ezJn5U="
     }
   },
   "cacheBootResources": true,
