@@ -11,8 +11,8 @@ builder.Services.AddScoped(sp => new HttpClient
 { 
     BaseAddress = new Uri("http://localhost:5024/api") 
 });
-builder.Services.AddHttpClient("CharactersApi" , c => c.BaseAddress = new Uri(builder.Configuration["ApiSettings:CharactersApi"]));
-builder.Services.AddHttpClient("TemplatesApi" , c => c.BaseAddress = new Uri(builder.Configuration["ApiSettings:TemplatesApi"]));
-
+// builder.Services.AddHttpClient("CharactersApi" , c => c.BaseAddress = new Uri(builder.Configuration["ApiSettings:CharactersApi"]!));
+// builder.Services.AddHttpClient("TemplatesApi" , c => c.BaseAddress = new Uri(builder.Configuration["ApiSettings:TemplatesApi"]!));
+// builder.Services.AddHttpClient("AuthApi" , c => c.BaseAddress = new Uri(builder.Configuration["ApiSettings:AuthApi"]!));
 await builder.Build().RunAsync();
     

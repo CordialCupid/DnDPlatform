@@ -20,3 +20,15 @@ D:\ETSU\Spring_2026\Software_Design\DnDPlatform-20260415T220631Z-3-001\DnDPlatfo
 D:\ETSU\Spring_2026\Software_Design\DnDPlatform-20260415T220631Z-3-001\DnDPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\refint\DnDPlatform.Models.dll
 D:\ETSU\Spring_2026\Software_Design\DnDPlatform-20260415T220631Z-3-001\DnDPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\DnDPlatform.Models.pdb
 D:\ETSU\Spring_2026\Software_Design\DnDPlatform-20260415T220631Z-3-001\DnDPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\ref\DnDPlatform.Models.dll
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\bin\Debug\net9.0\DnDPlatform.Models.deps.json
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\bin\Debug\net9.0\DnDPlatform.Models.dll
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\bin\Debug\net9.0\DnDPlatform.Models.pdb
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\DnDPlatform.Models.GeneratedMSBuildEditorConfig.editorconfig
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\DnDPlatform.Models.AssemblyInfoInputs.cache
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\DnDPlatform.Models.AssemblyInfo.cs
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\DnDPlatform.Models.csproj.CoreCompileInputs.cache
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\DnDPlatform.Models.sourcelink.json
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\DnDPlatform.Models.dll
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\refint\DnDPlatform.Models.dll
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\DnDPlatform.Models.pdb
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Models\obj\Debug\net9.0\ref\DnDPlatform.Models.dll

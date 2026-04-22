@@ -1,16 +1,65 @@
 ﻿@inherits LayoutComponentBase
+@inject HttpClient Client
+@inject IJSRuntime jsRuntime
+@using System.Text
+@using System.Text.Json
+
+
 <div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
+        @if (!loggedIn){
+            <div class="top-row px-4">
+                <a href="/register">Register</a>
+                <a href="/login">Login</a>
+            </div>
+        }
+        else {
+            <div class="top-row px-4">
+                <p class="m-0">Hello @me.username </p>
+                <a href="/login">Logout</a>
+            </div>
+        }
         <article class="content px-4">
             @Body
         </article>
     </main>
 </div>
+
+
+
+@code {
+    public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
+    private string token = "";
+    public MeStructure me = new();
+    private bool loggedIn = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        token = await GetFromLocalStorage("token");
+
+        me = await meRequest();
+    }
+
+    private async Task<MeStructure> meRequest() {
+        var request = new HttpRequestMessage(HttpMethod.Get, "api/me");
+        request.Headers.Add("Authorization", $"Bearer {token}");
+
+        using var response = await Client.SendAsync(request);
+        if (response.IsSuccessStatusCode) {
+            string responseRaw = await response.Content.ReadAsStringAsync();
+            loggedIn = true;
+            return JsonSerializer.Deserialize<MeStructure>(responseRaw)!;
+        }
+        return new MeStructure();
+    }  
+
+    public class MeStructure {
+        public string userId {get;set;}= "";
+        public string username {get;set;} = "";
+    }
+
+}

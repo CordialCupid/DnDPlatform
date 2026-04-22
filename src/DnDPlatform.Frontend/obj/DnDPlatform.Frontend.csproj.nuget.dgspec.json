@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\ETSU\\Spring_2026\\Software_Design\\DnDPlatform-20260415T220631Z-3-001\\DnDPlatform\\src\\DnDPlatform.Frontend\\DnDPlatform.Frontend.csproj": {}
+    "E:\\ETSU\\ETSU 2026 Spring\\Software Design\\Project\\DndPlatform\\src\\DnDPlatform.Frontend\\DnDPlatform.Frontend.csproj": {}
   },
   "projects": {
-    "D:\\ETSU\\Spring_2026\\Software_Design\\DnDPlatform-20260415T220631Z-3-001\\DnDPlatform\\src\\DnDPlatform.Frontend\\DnDPlatform.Frontend.csproj": {
+    "E:\\ETSU\\ETSU 2026 Spring\\Software Design\\Project\\DndPlatform\\src\\DnDPlatform.Frontend\\DnDPlatform.Frontend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\ETSU\\Spring_2026\\Software_Design\\DnDPlatform-20260415T220631Z-3-001\\DnDPlatform\\src\\DnDPlatform.Frontend\\DnDPlatform.Frontend.csproj",
+        "projectUniqueName": "E:\\ETSU\\ETSU 2026 Spring\\Software Design\\Project\\DndPlatform\\src\\DnDPlatform.Frontend\\DnDPlatform.Frontend.csproj",
         "projectName": "DnDPlatform.Frontend",
-        "projectPath": "D:\\ETSU\\Spring_2026\\Software_Design\\DnDPlatform-20260415T220631Z-3-001\\DnDPlatform\\src\\DnDPlatform.Frontend\\DnDPlatform.Frontend.csproj",
-        "packagesPath": "C:\\Users\\mason\\.nuget\\packages\\",
-        "outputPath": "D:\\ETSU\\Spring_2026\\Software_Design\\DnDPlatform-20260415T220631Z-3-001\\DnDPlatform\\src\\DnDPlatform.Frontend\\obj\\",
+        "projectPath": "E:\\ETSU\\ETSU 2026 Spring\\Software Design\\Project\\DndPlatform\\src\\DnDPlatform.Frontend\\DnDPlatform.Frontend.csproj",
+        "packagesPath": "C:\\Users\\Mason\\.nuget\\packages\\",
+        "outputPath": "E:\\ETSU\\ETSU 2026 Spring\\Software Design\\Project\\DndPlatform\\src\\DnDPlatform.Frontend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+          "E:\\VisualStudio2022\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\mason\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Mason\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -44,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.300"
+        "SdkAnalysisLevel": "10.0.100"
       },
       "frameworks": {
         "net9.0": {
@@ -66,13 +66,13 @@
             "Microsoft.NET.ILLink.Tasks": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.10, )",
+              "version": "[9.0.11, )",
               "autoReferenced": true
             },
             "Microsoft.NET.Sdk.WebAssembly.Pack": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[9.0.10, )",
+              "version": "[10.0.1, )",
               "autoReferenced": true
             }
           },
@@ -90,7 +90,7 @@
           "downloadDependencies": [
             {
               "name": "Microsoft.NETCore.App.Runtime.Mono.browser-wasm",
-              "version": "[9.0.10, 9.0.10]"
+              "version": "[9.0.11, 9.0.11]"
             }
           ],
           "frameworkReferences": {
@@ -98,7 +98,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.306/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.101/PortableRuntimeIdentifierGraph.json"
         }
       },
       "runtimes": {

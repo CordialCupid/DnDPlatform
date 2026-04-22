@@ -32,3 +32,21 @@ D:\ETSU\Spring_2026\Software_Design\DnDPlatform-20260415T220631Z-3-001\DnDPlatfo
 D:\ETSU\Spring_2026\Software_Design\DnDPlatform-20260415T220631Z-3-001\DnDPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.pdb
 D:\ETSU\Spring_2026\Software_Design\DnDPlatform-20260415T220631Z-3-001\DnDPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.genruntimeconfig.cache
 D:\ETSU\Spring_2026\Software_Design\DnDPlatform-20260415T220631Z-3-001\DnDPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\ref\DnDPlatform.Repositories.dll
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\bin\Debug\net9.0\DnDPlatform.Repositories.deps.json
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\bin\Debug\net9.0\DnDPlatform.Repositories.runtimeconfig.json
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\bin\Debug\net9.0\DnDPlatform.Repositories.dll
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\bin\Debug\net9.0\DnDPlatform.Repositories.pdb
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\bin\Debug\net9.0\DnDPlatform.Models.dll
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\bin\Debug\net9.0\DnDPlatform.Models.pdb
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.csproj.AssemblyReference.cache
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.GeneratedMSBuildEditorConfig.editorconfig
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.AssemblyInfoInputs.cache
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.AssemblyInfo.cs
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.csproj.CoreCompileInputs.cache
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.sourcelink.json
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatf.D0CEE7A9.Up2Date
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.dll
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\refint\DnDPlatform.Repositories.dll
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.pdb
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\DnDPlatform.Repositories.genruntimeconfig.cache
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Repositories\obj\Debug\net9.0\ref\DnDPlatform.Repositories.dll
