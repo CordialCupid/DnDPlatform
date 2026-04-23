@@ -6,6 +6,7 @@
 @using System.Text.Json
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel.DataAnnotations
+@using DnDPlatform.Frontend.Models.Entities;
 
 <PageTitle>Register</PageTitle>
 
@@ -54,6 +55,7 @@
 @code {
     private string _result = "";
     private RegisterModel model = new();
+    
 
     private async Task SubmitButton() {
         await regRequest();
@@ -77,18 +79,4 @@
             _result = $"Error: {response.StatusCode}";
         } 
     }  
-
-    public class RegisterModel
-    {
-        [Required]
-        public string Username {get;set;} = "";
-        [Required]
-        [EmailAddress]
-        public string Email {get;set;} = "";
-        [Required]
-        public string Password {get;set;} = "";
-        [Required]
-        [Compare(nameof(Password), ErrorMessage = "Passwords do not match!")]
-        public string ConfPass {get;set;} = "";
-    }
 }

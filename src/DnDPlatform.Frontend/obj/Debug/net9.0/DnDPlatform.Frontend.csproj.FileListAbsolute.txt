@@ -2204,10 +2204,10 @@ E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Fro
 E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\obj\Debug\net9.0\ref\DnDPlatform.Frontend.dll
 E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\obj\Debug\net9.0\compressed\hm0t6n2n01-{0}-i8havwd2cw-i8havwd2cw.gz
 E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\obj\Debug\net9.0\compressed\5ub5vtakp3-{0}-lbg2nb6uw3-lbg2nb6uw3.gz
-E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\bin\Debug\net9.0\wwwroot\_framework\DnDPlatform.Frontend.25rr8tcsq4.wasm
-E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\bin\Debug\net9.0\wwwroot\_framework\DnDPlatform.Frontend.je4rb9wc1n.pdb
-E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\bin\Debug\net9.0\wwwroot\_framework\DnDPlatform.Frontend.25rr8tcsq4.wasm.gz
-E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\bin\Debug\net9.0\wwwroot\_framework\DnDPlatform.Frontend.je4rb9wc1n.pdb.gz
-E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\obj\Debug\net9.0\compressed\zw2e3lr92y-{0}-25rr8tcsq4-25rr8tcsq4.gz
-E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\obj\Debug\net9.0\compressed\kxqol9jnmn-{0}-je4rb9wc1n-je4rb9wc1n.gz
-E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\obj\Debug\net9.0\compressed\q63g941o5d-{0}-dct3jn7kiu-dct3jn7kiu.gz
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\bin\Debug\net9.0\wwwroot\_framework\DnDPlatform.Frontend.3x1gzvq4nq.wasm
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\bin\Debug\net9.0\wwwroot\_framework\DnDPlatform.Frontend.0m5oljctjf.pdb
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\bin\Debug\net9.0\wwwroot\_framework\DnDPlatform.Frontend.3x1gzvq4nq.wasm.gz
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\bin\Debug\net9.0\wwwroot\_framework\DnDPlatform.Frontend.0m5oljctjf.pdb.gz
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\obj\Debug\net9.0\compressed\zw2e3lr92y-{0}-3x1gzvq4nq-3x1gzvq4nq.gz
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\obj\Debug\net9.0\compressed\kxqol9jnmn-{0}-0m5oljctjf-0m5oljctjf.gz
+E:\ETSU\ETSU 2026 Spring\Software Design\Project\DndPlatform\src\DnDPlatform.Frontend\obj\Debug\net9.0\compressed\q63g941o5d-{0}-d1oro3g6ad-d1oro3g6ad.gz

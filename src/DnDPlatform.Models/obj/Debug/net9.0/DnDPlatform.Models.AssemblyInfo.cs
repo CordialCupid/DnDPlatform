@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DnDPlatform.Models")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+16e6b83c0b7c53d686bae2f8ad23b8767f3a7e6b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ff5c963a5e510af6bdb82743abe10f4b5af9d235")]
 [assembly: System.Reflection.AssemblyProductAttribute("DnDPlatform.Models")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DnDPlatform.Models")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
