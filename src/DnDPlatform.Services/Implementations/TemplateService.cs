@@ -25,7 +25,6 @@ public class TemplateService(ITemplateRepository repo) : ITemplateService
 
     public async Task<TemplateDto> CreateTemplateAsync(Guid userId, CreateTemplateRequest request)
     {
-        // Validate JsonSchema is well-formed JSON
         try { JsonDocument.Parse(request.JsonSchema).Dispose(); }
         catch { throw new ArgumentException("JsonSchema is not valid JSON."); }
 

@@ -31,6 +31,8 @@
     private bool collapseNavMenu = true;
 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    [CascadingParameter]
+    private bool loggedIn {get;set;} = false;
 
     private void ToggleNavMenu()
     {

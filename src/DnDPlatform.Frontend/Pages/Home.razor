@@ -1,19 +1,17 @@
 ﻿@page "/"
 @inject IJSRuntime jsRuntime
 @inject HttpClient Client
+@inject NavigationManager navManager
 @using System.Text.Json
 @using System.Text
+@using DnDPlatform.Frontend.Models.Entities;
 
 <PageTitle>Home</PageTitle>
+
 
 
 @code {
     public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
     private string token = "";
-
-    public class MeStructure {
-        public string userId {get;set;}= "";
-        public string username {get;set;} = "";
-    }
 
 }
