@@ -7,9 +7,8 @@ namespace DnDPlatform.Repositories.Implementations;
 
 public class EfCharacterRepository(DnDDbContext db) : ICharacterRepository
 {
-    public Task<IEnumerable<Character>> GetAllByOwnerAsync(Guid ownerId) =>
-        Task.FromResult<IEnumerable<Character>>(
-            db.Characters.Include(c => c.Template).Where(c => c.OwnerId == ownerId).AsEnumerable());
+    public async Task<IEnumerable<Character>> GetAllByOwnerAsync(Guid ownerId) =>
+        await db.Characters.Include(c => c.Template).Where(c => c.OwnerId == ownerId).ToListAsync();
 
     public Task<Character?> GetByIdAsync(Guid id, bool includeSheets = false)
     {
