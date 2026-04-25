@@ -34,13 +34,13 @@
 
             <div class="mb-2">
                 <label for="registerPassword">Password</label><br>
-                <InputText placeholder="Password" id="registerPassword" @bind-Value="model.Password"/><br>
+                <InputText type="password" placeholder="Password" id="registerPassword" @bind-Value="model.Password"/><br>
                 <ValidationMessage For="@(() => model.Password)" />
             </div>
 
             <div class="mb-2">
                 <label for="registerConfPass">Confirm Password</label><br>
-                <InputText placeholder="Confirm Password" id="registerConfPass" @bind-Value="model.ConfPass"/><br>
+                <InputText type="password" placeholder="Confirm Password" id="registerConfPass" @bind-Value="model.ConfPass"/><br>
                 <ValidationMessage For="@(() => model.ConfPass)" />
             </div>
 
@@ -58,7 +58,11 @@
     
 
     private async Task SubmitButton() {
-        await regRequest();
+        var response = await regRequest();
+        if (response.IsSuccessStatusCode)
+        {
+            _result = await response.Content.ReadAsStringAsync();
+        }
         navManager.NavigateTo("/");  
     }
 
@@ -66,17 +70,12 @@
         navManager.NavigateTo("/");
     }
 
-    private async Task regRequest() {
+    private async Task<HttpResponseMessage> regRequest() {
         var request = new HttpRequestMessage(HttpMethod.Post, "api/auth/register");
         var postBody = new {username = model.Username, email = model.Email, password = model.Password};
         request.Content = new StringContent(JsonSerializer.Serialize(postBody), Encoding.UTF8, "application/json");
 
-        using var response = await Client.SendAsync(request);
-        if (response.IsSuccessStatusCode) {
-            _result = await response.Content.ReadAsStringAsync();
-        }
-        else {
-            _result = $"Error: {response.StatusCode}";
-        } 
+        var response = await Client.SendAsync(request);
+        return response;
     }  
 }

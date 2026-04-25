@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "FtlSuab8gJ4=",
+  "dgSpecHash": "paixgzzuxQg=",
   "success": true,
   "projectFilePath": "E:\\ETSU\\ETSU 2026 Spring\\Software Design\\Project\\DndPlatform\\src\\DnDPlatform.Frontend\\DnDPlatform.Frontend.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Mason\\.nuget\\packages\\blazor.bootstrap\\3.5.0\\blazor.bootstrap.3.5.0.nupkg.sha512",
     "C:\\Users\\Mason\\.nuget\\packages\\microsoft.aspnetcore.authorization\\9.0.10\\microsoft.aspnetcore.authorization.9.0.10.nupkg.sha512",
     "C:\\Users\\Mason\\.nuget\\packages\\microsoft.aspnetcore.components\\9.0.10\\microsoft.aspnetcore.components.9.0.10.nupkg.sha512",
     "C:\\Users\\Mason\\.nuget\\packages\\microsoft.aspnetcore.components.analyzers\\9.0.10\\microsoft.aspnetcore.components.analyzers.9.0.10.nupkg.sha512",

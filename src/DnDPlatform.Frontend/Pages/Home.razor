@@ -2,6 +2,7 @@
 @inject IJSRuntime jsRuntime
 @inject HttpClient Client
 @inject NavigationManager navManager
+@inject DnDPlatform.Frontend.Services.LoginSingletonService loginService
 @using System.Text.Json
 @using System.Text
 @using DnDPlatform.Frontend.Models.Entities;
@@ -13,5 +14,14 @@
 @code {
     public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
     private string token = "";
-
+    protected override async Task OnInitializedAsync()
+    {
+        if(loginService.LoggedIn)
+        {
+            return;
+        }
+        else{
+            navManager.NavigateTo("/register");
+        }
+    }
 }
