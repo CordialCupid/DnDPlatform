@@ -138,8 +138,10 @@ public class VersionSnapshotManager(
 
     private async Task EnsureOwnershipAsync(Guid userId, Guid characterId)
     {
-        if (!await characterRepo.ExistsAsync(characterId, userId))
-            throw new UnauthorizedAccessException($"Character {characterId} not found or access denied.");
+        var character = await characterRepo.GetByIdAsync(characterId)
+            ?? throw new KeyNotFoundException($"Character {characterId} not found.");
+        if (character.OwnerId != userId)
+            throw new UnauthorizedAccessException("Access denied.");
     }
 
     private static SheetVersionDto MapToDto(CharacterSheet s) => new()

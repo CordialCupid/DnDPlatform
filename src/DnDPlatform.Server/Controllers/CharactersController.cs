@@ -83,6 +83,7 @@ public class CharactersController(
         {
             return Ok(await versionManager.GetVersionHistoryAsync(CurrentUserId, id));
         }
+        catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
         catch (UnauthorizedAccessException) { return Forbid(); }
     }
 
