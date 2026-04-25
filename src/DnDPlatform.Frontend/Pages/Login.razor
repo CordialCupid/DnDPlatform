@@ -30,7 +30,7 @@
 
             <div class="mb-2">
                 <label for="loginPassword">Password</label><br>
-                <InputText placeholder="Password" id="loginPassword" @bind-Value="model.Password"/><br>
+                <InputText type="password" placeholder="Password" id="loginPassword" @bind-Value="model.Password"/><br>
                 <ValidationMessage For="@(() => model.Password)" />
             </div>
 
@@ -47,9 +47,16 @@
     private LoginModel model = new();
 
     private async Task SubmitButton() {
-        await loginRequest();
-        await SetToLocalStorage("token", _result.token);
-        navManager.NavigateTo("/");  
+        var response = await loginRequest();
+        if (response.IsSuccessStatusCode)
+        {
+            loginService.LoggedIn = !loginService.LoggedIn;
+            string responseRaw = await response.Content.ReadAsStringAsync();
+            _result = JsonSerializer.Deserialize<TokenStructure>(responseRaw);
+            await SetToLocalStorage("token", _result.token);
+            navManager.NavigateTo("/");  
+            StateHasChanged();
+        }
     }
 
     private void CancelButton() {
@@ -58,16 +65,12 @@
 
     private async ValueTask SetToLocalStorage(string key, string value) => await jsRuntime.InvokeVoidAsync("localStorage.setItem", key, value);
 
-    private async Task loginRequest() {
+    private async Task<HttpResponseMessage> loginRequest() {
         var request = new HttpRequestMessage(HttpMethod.Post, "api/auth/login");
         var postBody = new {username = model.Username, password = model.Password};
         request.Content = new StringContent(JsonSerializer.Serialize(postBody), Encoding.UTF8, "application/json");
 
-        using var response = await Client.SendAsync(request);
-        if (response.IsSuccessStatusCode) {
-            loginService.LoggedIn = true;
-            string responseRaw = await response.Content.ReadAsStringAsync();
-            _result = JsonSerializer.Deserialize<TokenStructure>(responseRaw)!;
-        }
+        var response = await Client.SendAsync(request);
+        return response;
     }  
 }

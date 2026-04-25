@@ -1,9 +1,101 @@
 ﻿@page "/characters"
 @inject NavigationManager navManager
 @inject HttpClient Http
+@inject NavigationManager navManager
+@inject DnDPlatform.Frontend.Services.LoginSingletonService loginService
+@using BlazorBootstrap;
+@using DnDPlatform.Frontend.Models.Entities
+@using System.Text.Json
+@using System.Text
 
 <PageTitle>Characters</PageTitle>
 
-@code {
 
+<div class="m-2">
+    <button disabled="@_dialogOpen" class="btn btn-primary" @onclick="this.OpenDialog">Open Dialog</button> 
+</div>
+
+<div class="modal fade @_dialogCss" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="this.CloseDialog"></button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@model" OnValidSubmit="@Submission" FormName="createCharForm" id="createCharForm">
+                    <DataAnnotationsValidator/>
+
+                    <label for="nameInput">Enter New Character Name:</label><br />
+                    <InputText id="nameInput" @bind-Value="model.CharacterName" placeholder="name..."/>
+                    <ValidationMessage For="@(() => model.CharacterName)"/>
+
+                    <br /><label for="idInput">Enter Template Id:</label><br />
+                    <InputText id="idInput" @bind-Value="model.TemplateId" placeholder="Template..."/>
+                    <ValidationMessage For="@(() => model.TemplateId)"/>
+                </EditForm>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="this.CloseDialog">Close</button>
+                <button type="submit" form="createCharForm" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private CreateCharacterModel? model = new();
+    private bool _dialogOpen;
+    private string _dialogCss => _dialogOpen ? "show" : "hide"; 
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(loginService.LoggedIn)
+        {
+            return;
+        }
+        else{
+            navManager.NavigateTo("/register");
+        }
+    }
+
+    private Task OpenDialog()
+    {
+        _dialogOpen = true;
+        return Task.CompletedTask;
+    }
+
+    private Task CloseDialog()
+    {
+        _dialogOpen = false;
+        return Task.CompletedTask;
+    }
+
+    private async Task Submission()
+    {
+        var response = await CreateCharacterPost();
+        CloseDialog();
+    }
+
+    private async Task<HttpResponseMessage> CreateCharacterPost()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, "/api/characters");
+        var PostBody = new {name = model.CharacterName, templateId = model.TemplateId};
+        request.Content = new StringContent(JsonSerializer.Serialize(PostBody), Encoding.UTF8, "application/json");
+        var response = await Http.SendAsync(request);
+
+        return response;
+    }
 }
+
+<style>
+    .show {
+        display:block;
+    }
+
+    .hide {
+        display: none;
+    }
+</style>
+

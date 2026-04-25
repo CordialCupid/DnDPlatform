@@ -7,37 +7,44 @@
 @using DnDPlatform.Frontend.Models.Entities;
 @using DnDPlatform.Frontend.Pages
 
+@if(isLoading)
+{
+    <p class="vw-100 vh-100">Please Wait...</p>
+}
+else
+{
+    <div class="page">
+        
+        <div class="sidebar">
+            <NavMenu />
+        </div>
 
-<div class="page">
-    
-    <div class="sidebar">
-        <NavMenu />
+        <main>
+            @if(!loginService.LoggedIn) {
+                <div class="top-row px-4">
+                    <a href="/register">Register</a>
+                    <a href="/login">Login</a>
+                </div>
+            }
+            else {
+                <div class="top-row px-4">
+                    <p class="m-0">Hello @me.username </p>
+                    <button style="background-color: #F7F7F7; border: none;" type="button" @onclick="Logout">
+                        Logout
+                    </button>
+                </div>
+            }
+            <article class="content px-4">
+                @Body
+            </article>
+        </main>
     </div>
-
-    <main>
-        @if(!loginService.LoggedIn) {
-            <div class="top-row px-4">
-                <a href="/register">Register</a>
-                <a href="/login">Login</a>
-            </div>
-        }
-        else {
-            <div class="top-row px-4">
-                <p class="m-0">Hello @me.username </p>
-                <button style="background-color: #F7F7F7; border: none;" type="button" @onclick="Logout">
-                    Logout
-                </button>
-            </div>
-        }
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+}
 
 
 @code 
 {
+    private bool isLoading;
     public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
     public async ValueTask<string?> DeleteFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.removeItem", key) ?? defaultValue;
     private string? token;
@@ -45,28 +52,36 @@
 
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         token = await GetFromLocalStorage("token");
 
         if (token != null) {
-            me = await meRequest();
+            var response = await meRequest();
+            if (response.IsSuccessStatusCode)
+            {
+                loginService.LoggedIn = true;
+                using Stream stream = await response.Content.ReadAsStreamAsync();
+                me = JsonSerializer.Deserialize<MeStructure>(stream)!;     
+                
+            }
+        }
+        if (me?.username != null)
+        {
+            isLoading = false;
         }
     }
 
-    private async Task<MeStructure> meRequest() {
+    private async Task<HttpResponseMessage> meRequest() {
         var request = new HttpRequestMessage(HttpMethod.Get, "api/me");
         request.Headers.Add("Authorization", $"Bearer {token}");
+        var response = await Client.SendAsync(request);
 
-        using var response = await Client.SendAsync(request);
-        if (response.IsSuccessStatusCode) {
-            string responseRaw = await response.Content.ReadAsStringAsync();
-            loginService.LoggedIn = true;
-            return JsonSerializer.Deserialize<MeStructure>(responseRaw)!;
-        }
-        return new MeStructure();
+        return response;
     }  
 
     private async Task Logout() {
         await DeleteFromLocalStorage("token");
         loginService.LoggedIn = !loginService.LoggedIn;
+        StateHasChanged();
     }
 }

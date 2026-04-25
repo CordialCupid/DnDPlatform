@@ -1,8 +1,9 @@
 {
   "mainAssemblyName": "DnDPlatform.Frontend",
   "resources": {
-    "hash": "sha256-V2QBn729+7Rn1f4jKZ0YjjLl/6gbV8LPPj7ZCpk4ViQ=",
+    "hash": "sha256-I7rYG+LXiETv4wMErR3AF/NWGtzQ/9uO/DUDDgDngSw=",
     "fingerprinting": {
+      "BlazorBootstrap.3fpgua723m.wasm": "BlazorBootstrap.wasm",
       "Microsoft.AspNetCore.Authorization.50odlujk1g.wasm": "Microsoft.AspNetCore.Authorization.wasm",
       "Microsoft.AspNetCore.Components.nxuc56wpt2.wasm": "Microsoft.AspNetCore.Components.wasm",
       "Microsoft.AspNetCore.Components.Forms.ebm2eah9ku.wasm": "Microsoft.AspNetCore.Components.Forms.wasm",
@@ -205,8 +206,8 @@
       "icudt_CJK.tjcz0u77k5.dat": "icudt_CJK.dat",
       "icudt_EFIGS.tptq2av103.dat": "icudt_EFIGS.dat",
       "icudt_no_CJK.lfu7j35m59.dat": "icudt_no_CJK.dat",
-      "DnDPlatform.Frontend.3x1gzvq4nq.wasm": "DnDPlatform.Frontend.wasm",
-      "DnDPlatform.Frontend.0m5oljctjf.pdb": "DnDPlatform.Frontend.pdb"
+      "DnDPlatform.Frontend.rnlg2vfxv2.wasm": "DnDPlatform.Frontend.wasm",
+      "DnDPlatform.Frontend.5hh99drzlm.pdb": "DnDPlatform.Frontend.pdb"
     },
     "jsModuleNative": {
       "dotnet.native.noby4tlk4d.js": "sha256-p9eEzXhQIsI0a5bBJhfzW15iRafgplTxT8XrO5FiH9o="
@@ -227,6 +228,7 @@
       "System.Private.CoreLib.tn7ijpxcub.wasm": "sha256-Sf4jO0ZWIg9IPLgB2yr+IJinPiaj4VseqLyVCcHvrSE="
     },
     "assembly": {
+      "BlazorBootstrap.3fpgua723m.wasm": "sha256-UeUH+VrIsLruzDZQ/QHHQ9UP5e6ITha5K+k5yhkiZmM=",
       "Microsoft.AspNetCore.Authorization.50odlujk1g.wasm": "sha256-O6gwBUzf9DWkYK5DXMp4fTEAstwNFIPsjlViL0BTB+s=",
       "Microsoft.AspNetCore.Components.nxuc56wpt2.wasm": "sha256-ZZvLHwoYG5nqfX54U4Zc/UtP1KLvnqNX8L1CnogLjKw=",
       "Microsoft.AspNetCore.Components.Forms.ebm2eah9ku.wasm": "sha256-hpzAJOwIDLTR1RUMGFHDRpM1n8rgh2jSCKdsLF4LlFQ=",
@@ -420,10 +422,10 @@
       "WindowsBase.ahs9krftg4.wasm": "sha256-bgi2FHdT0ABsUP1yKQQ2AP8qfo1V/bS/4cJFE4OUHX8=",
       "mscorlib.k5iaovx9v7.wasm": "sha256-mEFLDERlY1HMNQHzh68xOPawXvI48O1fHW9PbfXugb4=",
       "netstandard.6sr1qvn64m.wasm": "sha256-Gpf+qEqCYaCB6zqI5sNPIurnfpwRtfcWksgf3CW6mHE=",
-      "DnDPlatform.Frontend.3x1gzvq4nq.wasm": "sha256-t+xFnEUvtuUOUW9xaaSJ1nsLaBXIw66YmeD+hFz2wfA="
+      "DnDPlatform.Frontend.rnlg2vfxv2.wasm": "sha256-px+4O0g9BUBB9Ae7huu6DsR9QS/o8SrnIjMUbWjLq8Y="
     },
     "pdb": {
-      "DnDPlatform.Frontend.0m5oljctjf.pdb": "sha256-aJP2Ox4L72Yrphfp52wyxDor42SIgttTg7rZzOnMdQI="
+      "DnDPlatform.Frontend.5hh99drzlm.pdb": "sha256-R9JhT7dv7DytXtCwaT5QRrUI8yCCX3iaZkGqRingkXo="
     }
   },
   "cacheBootResources": true,
