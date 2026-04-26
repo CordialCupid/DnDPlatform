@@ -16,7 +16,7 @@ else
 {
     <div class="page">
         
-        <div class="sidebar">
+        <div class="sidebar" style= "@IconMenuCssClass">
             <NavMenu />
         </div>
 
@@ -29,6 +29,7 @@ else
             }
             else {
                 <div class="top-row px-4">
+                    <img src="/Photos/TopHeader.png" class="topbar-bg" alt="Tavern Bartop" />
                     <p class="m-0">Hello @loginService.MeAccount?.username </p>
                     <button style="background-color: #F7F7F7; border: none;" type="button" @onclick="Logout">
                         Logout
@@ -49,6 +50,13 @@ else
     public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
     public async ValueTask<string?> DeleteFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.removeItem", key) ?? defaultValue;
     private string? token;
+    private bool _iconMenuActive { get; set; }
+    private string? IconMenuCssClass => _iconMenuActive ? "width: 80px;" : null;
+
+    protected void ToggleIconMenu(bool iconMenuActive)
+    {
+        _iconMenuActive = iconMenuActive;
+    }
     protected override async Task OnInitializedAsync()
     {
         isLoading = true;
