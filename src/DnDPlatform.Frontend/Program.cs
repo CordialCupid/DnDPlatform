@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Http;
 using DnDPlatform.Frontend;
-using DnDPlatform.Frontend.Models.Entities;
 using DnDPlatform.Frontend.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

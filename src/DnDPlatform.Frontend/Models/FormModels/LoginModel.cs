@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DnDPlatform.Frontend.Models.Entities;
+namespace DnDPlatform.Frontend.Models.FormModels;
 public class LoginModel
 {
     [Required]

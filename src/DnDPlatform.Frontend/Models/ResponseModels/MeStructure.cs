@@ -1,4 +1,4 @@
-namespace DnDPlatform.Frontend.Models.Entities;
+namespace DnDPlatform.Frontend.Models.ReponseModels;
 
 public class MeStructure {
     public string userId {get;set;}= "";

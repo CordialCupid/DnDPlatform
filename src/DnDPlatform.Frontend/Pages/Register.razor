@@ -6,7 +6,7 @@
 @using System.Text.Json
 @using Microsoft.AspNetCore.Components.Forms
 @using System.ComponentModel.DataAnnotations
-@using DnDPlatform.Frontend.Models.Entities;
+@using DnDPlatform.Frontend.Models.FormModels
 
 <PageTitle>Register</PageTitle>
 
@@ -22,25 +22,25 @@
             <DataAnnotationsValidator />
             <div class="mb-2">
                 <label for="registerUsername">Username</label><br>
-                <InputText placeholder="Username" id="registerUsername" @bind-Value="model.Username"/><br>
+                <InputText class="rounded bg-light" style="border: none" placeholder="Username" id="registerUsername" @bind-Value="model.Username"/><br>
                 <ValidationMessage For="@(() => model.Username)" />
             </div>
 
             <div class="mb-2">
                 <label for="registerEmail">Email</label><br>
-                <InputText placeholder="Email" id="registerEmail" @bind-Value="model.Email"/><br>
+                <InputText class="rounded bg-light" style="border: none" placeholder="Email" id="registerEmail" @bind-Value="model.Email"/><br>
                 <ValidationMessage For="@(() => model.Email)" />
             </div>
 
             <div class="mb-2">
                 <label for="registerPassword">Password</label><br>
-                <InputText type="password" placeholder="Password" id="registerPassword" @bind-Value="model.Password"/><br>
+                <InputText class="rounded bg-light" style="border: none" type="password" placeholder="Password" id="registerPassword" @bind-Value="model.Password"/><br>
                 <ValidationMessage For="@(() => model.Password)" />
             </div>
 
             <div class="mb-2">
                 <label for="registerConfPass">Confirm Password</label><br>
-                <InputText type="password" placeholder="Confirm Password" id="registerConfPass" @bind-Value="model.ConfPass"/><br>
+                <InputText class="rounded bg-light" style="border: none" type="password" placeholder="Confirm Password" id="registerConfPass" @bind-Value="model.ConfPass"/><br>
                 <ValidationMessage For="@(() => model.ConfPass)" />
             </div>
 

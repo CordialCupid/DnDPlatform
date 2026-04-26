@@ -7,7 +7,8 @@
 @using System.Text
 @using System.Text.Json
 @using System.ComponentModel.DataAnnotations
-@using DnDPlatform.Frontend.Models.Entities;
+@using DnDPlatform.Frontend.Models.FormModels
+@using DnDPlatform.Frontend.Models.ResponseModels
 
 <PageTitle>Templates</PageTitle>
 
@@ -99,7 +100,7 @@
 
 @code {
     private TemplateModel template {get;set;} = new();
-    private List<TemplateResponseModel>? templates {get;set;} = new List<TemplateResponseModel>();
+    private List<TemplateResponseModel> templates {get;set;} = new List<TemplateResponseModel>();
     private string _result = "";
     public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
     private string? token = "";
@@ -113,7 +114,7 @@
         if (GetTemplateResponse.IsSuccessStatusCode)
         {
             string stream = await GetTemplateResponse.Content.ReadAsStringAsync();
-            templates = JsonSerializer.Deserialize<List<TemplateResponseModel>>(stream);
+            templates = JsonSerializer.Deserialize<List<TemplateResponseModel>>(stream) ?? new List<TemplateResponseModel>();
         }
 
     }
@@ -145,7 +146,7 @@
             if (response.IsSuccessStatusCode)
             {
                 string stream = await response.Content.ReadAsStringAsync();
-                templates = JsonSerializer.Deserialize<List<TemplateResponseModel>>(stream);
+                templates = JsonSerializer.Deserialize<List<TemplateResponseModel>>(stream) ?? new List<TemplateResponseModel>();
             }
         }
         else{
