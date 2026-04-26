@@ -29,31 +29,36 @@ public static class SheetValidationEngine
         }
         catch
         {
-            return result; // Template schema malformed — skip validation
+            return result; 
         }
 
         using (sheetDoc)
         using (schemaDoc)
         {
             if (!schemaDoc.RootElement.TryGetProperty("fields", out var fields))
-                return result;
+            {
+                return result;          
+            }
 
             var sheetRoot = sheetDoc.RootElement;
 
             foreach (var field in fields.EnumerateArray())
             {
                 if (!field.TryGetProperty("key", out var keyProp))
-                    continue;
+                {
+                    continue;  
+                }
 
                 var key = keyProp.GetString() ?? string.Empty;
                 var required = field.TryGetProperty("required", out var req) && req.GetBoolean();
                 var dataType = field.TryGetProperty("dataType", out var dt) ? dt.GetString() ?? "string" : "string";
 
-                // Check conditional visibility
                 if (field.TryGetProperty("condition", out var condition))
                 {
                     if (!EvaluateCondition(condition, sheetRoot))
-                        continue; // Field is not visible — skip validation
+                    {
+                        continue;        
+                    }
                 }
 
                 var hasValue = sheetRoot.TryGetProperty(key, out var value);
@@ -65,9 +70,10 @@ public static class SheetValidationEngine
                 }
 
                 if (!hasValue || IsEmpty(value))
-                    continue;
+                {
+                    continue;            
+                }
 
-                // Type validation
                 var typeError = ValidateType(key, value, dataType);
                 if (typeError is not null)
                 {
@@ -75,23 +81,28 @@ public static class SheetValidationEngine
                     continue;
                 }
 
-                // Min/Max for numbers
                 if (dataType == "number" || dataType == "integer")
                 {
                     var numVal = value.GetDouble();
                     if (field.TryGetProperty("min", out var min) && numVal < min.GetDouble())
+                    {
                         result.Errors.Add(new ValidationError { Field = key, Message = $"Field '{key}' must be >= {min.GetDouble()}." });
+                        
+                    }
                     if (field.TryGetProperty("max", out var max) && numVal > max.GetDouble())
+                    {
                         result.Errors.Add(new ValidationError { Field = key, Message = $"Field '{key}' must be <= {max.GetDouble()}." });
+                    }
                 }
 
-                // Regex for strings
                 if (dataType == "string" && field.TryGetProperty("pattern", out var pattern))
                 {
                     var strVal = value.GetString() ?? string.Empty;
                     var patternStr = pattern.GetString() ?? string.Empty;
                     if (!string.IsNullOrEmpty(patternStr) && !Regex.IsMatch(strVal, patternStr))
+                    {
                         result.Errors.Add(new ValidationError { Field = key, Message = $"Field '{key}' does not match the required pattern." });
+                    }
                 }
             }
         }
@@ -119,13 +130,19 @@ public static class SheetValidationEngine
 
     private static bool EvaluateCondition(JsonElement condition, JsonElement sheetRoot)
     {
-        if (!condition.TryGetProperty("field", out var fieldProp) ||
-            !condition.TryGetProperty("value", out var valueProp))
-            return true;
+        if (!condition.TryGetProperty("field", out var fieldProp) || !condition.TryGetProperty("value", out var valueProp))
+        {
+            return true;    
+        }
 
         var condField = fieldProp.GetString() ?? string.Empty;
         if (!sheetRoot.TryGetProperty(condField, out var actual))
+        {
+
+            
             return false;
+            
+        }
 
         return actual.ToString() == valueProp.ToString();
     }

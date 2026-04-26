@@ -5,36 +5,41 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DnDPlatform.Repositories.Implementations;
 
-public class EfCharacterSheetRepository(DnDDbContext db) : ICharacterSheetRepository
+public class EfCharacterSheetRepository : ICharacterSheetRepository
 {
-    public Task<CharacterSheet?> GetCurrentAsync(Guid characterId) =>
-        db.CharacterSheets
-            .Where(s => s.CharacterId == characterId)
-            .OrderByDescending(s => s.VersionNumber)
-            .FirstOrDefaultAsync();
+    private readonly DnDDbContext _db;
+    public EfCharacterSheetRepository(DnDDbContext db)
+    {
+        _db = db;
+    }
+    public Task<CharacterSheet?> GetCurrentAsync(Guid characterId)
+    {
+        return _db.CharacterSheets.Where(s => s.CharacterId == characterId).OrderByDescending(s => s.VersionNumber).FirstOrDefaultAsync();
+    }
 
-    public Task<CharacterSheet?> GetByVersionAsync(Guid characterId, int versionNumber) =>
-        db.CharacterSheets.FirstOrDefaultAsync(s => s.CharacterId == characterId && s.VersionNumber == versionNumber);
+    public Task<CharacterSheet?> GetByVersionAsync(Guid characterId, int versionNumber)
+    {
+        return _db.CharacterSheets.FirstOrDefaultAsync(s => s.CharacterId == characterId && s.VersionNumber == versionNumber);
+    }
 
-    public Task<IEnumerable<CharacterSheet>> GetVersionHistoryAsync(Guid characterId) =>
-        Task.FromResult<IEnumerable<CharacterSheet>>(
-            db.CharacterSheets
-                .Where(s => s.CharacterId == characterId)
-                .OrderByDescending(s => s.VersionNumber)
-                .AsEnumerable());
+    public Task<IEnumerable<CharacterSheet>> GetVersionHistoryAsync(Guid characterId)
+    {
+        return Task.FromResult<IEnumerable<CharacterSheet>>(_db.CharacterSheets.Where(s => s.CharacterId == characterId).OrderByDescending(s => s.VersionNumber).AsEnumerable()); 
+    }
 
     public async Task<CharacterSheet> InsertAsync(CharacterSheet sheet)
     {
-        db.CharacterSheets.Add(sheet);
-        await db.SaveChangesAsync();
+        _db.CharacterSheets.Add(sheet);
+        await _db.SaveChangesAsync();
         return sheet;
     }
 
     public async Task<int> GetNextVersionNumberAsync(Guid characterId)
     {
-        var max = await db.CharacterSheets
-            .Where(s => s.CharacterId == characterId)
-            .MaxAsync(s => (int?)s.VersionNumber);
+
+        var max = await _db.CharacterSheets.Where(s => s.CharacterId == characterId).MaxAsync(s => (int?)s.VersionNumber);
+
+        // if max return as null, set it to 0. Always increment
         return (max ?? 0) + 1;
     }
 }

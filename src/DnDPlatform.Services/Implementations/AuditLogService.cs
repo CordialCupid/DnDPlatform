@@ -6,8 +6,14 @@ using System.Text.Json;
 
 namespace DnDPlatform.Services.Implementations;
 
-public class AuditLogService(IAuditLogRepository repo) : IAuditLogService
+public class AuditLogService : IAuditLogService
 {
+    private readonly IAuditLogRepository _auditRepo;
+
+    public AuditLogService(IAuditLogRepository auditRepo)
+    {
+        _auditRepo = auditRepo;
+    }
     public Task LogAsync(Guid userId, string username, AuditAction action, ResourceType resourceType, Guid resourceId, object? metadata = null)
     {
         var entry = new AuditLog
@@ -20,6 +26,6 @@ public class AuditLogService(IAuditLogRepository repo) : IAuditLogService
             MetadataJson = metadata is null ? "{}" : JsonSerializer.Serialize(metadata),
             Timestamp = DateTime.UtcNow
         };
-        return repo.InsertAsync(entry);
+        return _auditRepo.InsertAsync(entry);
     }
 }

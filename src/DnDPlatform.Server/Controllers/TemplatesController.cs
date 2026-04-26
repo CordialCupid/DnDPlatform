@@ -8,28 +8,46 @@ namespace DnDPlatform.Server.Controllers;
 [ApiController]
 [Route("api/templates")]
 [Authorize]
-public class TemplatesController(ITemplateService templateService) : AuthorizedControllerBase
+public class TemplatesController : AuthorizedControllerBase
 {
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<TemplateDto>>> GetAll([FromQuery] string? system) =>
-        Ok(await templateService.GetTemplatesAsync(system));
+    private readonly ITemplateService _templateService;
 
+    public TemplatesController(ITemplateService templateService)
+    {
+        _templateService = templateService;
+    }
+
+    // endpoint to get all templates
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<TemplateDto>>> GetAll([FromQuery] string? system)
+    {
+        
+        return Ok(await _templateService.GetTemplatesAsync(system));
+    }
+
+
+    // endpoint to retireve specific templates by id
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<TemplateDto>> GetById(Guid id)
     {
         try
         {
-            return Ok(await templateService.GetTemplateAsync(id));
+            return Ok(await _templateService.GetTemplateAsync(id));
         }
-        catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
+        catch (KeyNotFoundException ex) 
+        { 
+            return NotFound(new { message = ex.Message }); 
+        }
     }
 
+    // endpoint to create a template
     [HttpPost]
     public async Task<ActionResult<TemplateDto>> Create(CreateTemplateRequest request)
     {
         try
         {
-            var template = await templateService.CreateTemplateAsync(CurrentUserId, request);
+            var template = await _templateService.CreateTemplateAsync(CurrentUserId, request);
+            
             return CreatedAtAction(nameof(GetById), new { id = template.Id }, template);
         }
         catch (ArgumentException ex)

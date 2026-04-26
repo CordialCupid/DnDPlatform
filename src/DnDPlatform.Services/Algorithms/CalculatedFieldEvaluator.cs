@@ -7,11 +7,6 @@ namespace DnDPlatform.Services.Algorithms;
 public static class CalculatedFieldEvaluator
 {
     private static readonly Regex TokenPattern = new(@"\b([a-zA-Z_][a-zA-Z0-9_]*)\b");
-
-    /// <summary>
-    /// Resolves all calculated fields in the sheet blob against the template schema.
-    /// Returns the updated JSON blob with calculated field values filled in.
-    /// </summary>
     public static string Evaluate(string templateSchema, string sheetBlob)
     {
         JsonDocument schemaDoc;
@@ -31,7 +26,10 @@ public static class CalculatedFieldEvaluator
         using (sheetDoc)
         {
             if (!schemaDoc.RootElement.TryGetProperty("fields", out var fields))
+            {
                 return sheetBlob;
+                
+            }
 
             var values = ExtractValues(sheetDoc.RootElement);
             var calculatedFields = new Dictionary<string, string>();
@@ -39,9 +37,14 @@ public static class CalculatedFieldEvaluator
             foreach (var field in fields.EnumerateArray())
             {
                 if (!field.TryGetProperty("formula", out var formula))
-                    continue;
+                {
+                    continue;      
+                }
                 if (!field.TryGetProperty("key", out var key))
+                {
                     continue;
+                    
+                }
 
                 var formulaStr = formula.GetString() ?? string.Empty;
                 var keyStr = key.GetString() ?? string.Empty;
@@ -49,9 +52,11 @@ public static class CalculatedFieldEvaluator
             }
 
             if (calculatedFields.Count == 0)
-                return sheetBlob;
+            {
+                return sheetBlob;    
+            }
 
-            // Topological sort to resolve dependencies in order
+            // used to resolve dependencies in order
             var sortedKeys = TopologicalSort(calculatedFields);
 
             foreach (var fieldKey in sortedKeys)
@@ -61,13 +66,17 @@ public static class CalculatedFieldEvaluator
                 if (double.TryParse(resolved, out var num)) values[fieldKey] = num;
             }
 
-            // Rebuild JSON with calculated values merged in
+            // rebuild JSON with calculated values added in
             var dict = new Dictionary<string, object>();
             foreach (var prop in sheetDoc.RootElement.EnumerateObject())
-                dict[prop.Name] = GetValue(prop.Value);
+            {
+                dict[prop.Name] = GetValue(prop.Value);       
+            }
 
             foreach (var (k, v) in values)
-                dict[k] = v;
+            {
+                dict[k] = v;     
+            }
 
             return JsonSerializer.Serialize(dict);
         }
@@ -79,7 +88,9 @@ public static class CalculatedFieldEvaluator
         foreach (var prop in root.EnumerateObject())
         {
             if (prop.Value.ValueKind == JsonValueKind.Number)
+            {
                 values[prop.Name] = prop.Value.GetDouble();
+            }
         }
         return values;
     }
@@ -127,7 +138,9 @@ public static class CalculatedFieldEvaluator
         }
 
         foreach (var key in formulas.Keys)
+        {
             Visit(key);
+        }
 
         return sorted;
     }
