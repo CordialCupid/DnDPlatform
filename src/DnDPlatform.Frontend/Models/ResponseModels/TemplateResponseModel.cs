@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-namespace DnDPlatform.Frontend.Models.Entities;
+namespace DnDPlatform.Frontend.Models.ResponseModels;
 public class TemplateResponseModel
 {
     public Guid id { get; set; }
