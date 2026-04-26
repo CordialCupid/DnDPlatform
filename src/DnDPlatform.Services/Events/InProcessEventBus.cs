@@ -17,7 +17,9 @@ public class InProcessEventBus(ILogger<InProcessEventBus> logger) : IEventBus
     {
         var key = typeof(T);
         if (!_handlers.TryGetValue(key, out var handlers))
-            return;
+        {
+            return;     
+        }
 
         foreach (var handler in handlers)
         {

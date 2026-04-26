@@ -7,21 +7,30 @@ using DnDPlatform.Services.Interfaces;
 
 namespace DnDPlatform.Services.Implementations;
 
-public class CharacterCreationService(
-    ICharacterRepository characterRepo,
-    ITemplateRepository templateRepo,
-    IDnDInfoService dndInfoService,
-    IVersionSnapshotManager versionManager,
-    IAuditLogService auditLog,
-    IEventBus eventBus) : ICharacterCreationService
+public class CharacterCreationService : ICharacterCreationService
 {
+    private readonly ICharacterRepository _characterRepo;
+    private readonly ITemplateRepository _templateRepo;
+    private readonly IVersionSnapshotManager _snapshotManager;
+    private readonly IEventBus _eventBus;
+
+    public CharacterCreationService(ICharacterRepository characterRepo, ITemplateRepository templateRepo, IVersionSnapshotManager snapshotManager,IEventBus eventBus)
+    {
+        _characterRepo = characterRepo;
+        _templateRepo = templateRepo;
+        _snapshotManager = snapshotManager;
+        _eventBus = eventBus;
+    }
+
+
     public async Task<CharacterDto> CreateCharacterAsync(Guid userId, CreateCharacterRequest request)
     {
-        var template = await templateRepo.GetByIdAsync(request.TemplateId)
-            ?? throw new KeyNotFoundException($"Template {request.TemplateId} not found.");
-
-        // Pre-fetch D&D reference data (warms the cache)
-        _ = dndInfoService.GetClassesAsync();
+        var template = await _templateRepo.GetByIdAsync(request.TemplateId);
+        
+        if (template == null)
+        {
+            throw new KeyNotFoundException($"Template {request.TemplateId} not found.");
+        }
 
         var character = new Character
         {
@@ -35,12 +44,11 @@ public class CharacterCreationService(
             UpdatedAt = DateTime.UtcNow
         };
 
-        var saved = await characterRepo.InsertAsync(character);
+        var saved = await _characterRepo.InsertAsync(character);
 
-        // Write version 1 sheet blob seeded from template defaults
-        await versionManager.InitializeAsync(saved.Id, template.JsonSchema);
+        await _snapshotManager.InitializeAsync(saved.Id, template.JsonSchema);
 
-        await eventBus.PublishAsync(new CharacterCreatedEvent
+        await _eventBus.PublishAsync(new CharacterCreatedEvent
         {
             UserId = userId,
             CharacterId = saved.Id,

@@ -7,14 +7,18 @@ namespace DnDPlatform.Repositories.Implementations;
 
 public class EfCharacterRepository(DnDDbContext db) : ICharacterRepository
 {
-    public async Task<IEnumerable<Character>> GetAllByOwnerAsync(Guid ownerId) =>
-        await db.Characters.Include(c => c.Template).Where(c => c.OwnerId == ownerId).ToListAsync();
+    public async Task<IEnumerable<Character>> GetAllByOwnerAsync(Guid ownerId)
+    {
+        return await db.Characters.Include(c => c.Template).Where(c => c.OwnerId == ownerId).ToListAsync();    
+    }
 
     public Task<Character?> GetByIdAsync(Guid id, bool includeSheets = false)
     {
         IQueryable<Character> query = db.Characters.Include(c => c.Template);
         if (includeSheets)
+        {
             query = query.Include(c => c.Sheets);
+        }
         return query.FirstOrDefaultAsync(c => c.Id == id);
     }
 
@@ -42,7 +46,4 @@ public class EfCharacterRepository(DnDDbContext db) : ICharacterRepository
             await db.SaveChangesAsync();
         }
     }
-
-    public Task<bool> ExistsAsync(Guid id, Guid ownerId) =>
-        db.Characters.AnyAsync(c => c.Id == id && c.OwnerId == ownerId);
 }

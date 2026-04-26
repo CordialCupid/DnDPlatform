@@ -8,10 +8,14 @@ namespace DnDPlatform.Server.Controllers;
 [Authorize]
 public class MeController : AuthorizedControllerBase
 {
+    // Endpoint for getting the current users id and username
     [HttpGet]
-    public IActionResult GetMe() => Ok(new
+    public IActionResult GetMe() 
     {
-        UserId = CurrentUserId,
-        Username = CurrentUsername
-    });
+        return Ok(new
+        {
+            UserId = CurrentUserId,
+            Username = CurrentUsername
+        });
+    }
 }

@@ -5,24 +5,28 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DnDPlatform.Repositories.Implementations;
 
-public class EfUserRepository(DnDDbContext db) : IUserRepository
+public class EfUserRepository : IUserRepository
 {
-    public Task<User?> GetByIdAsync(Guid id) =>
-        db.Users.FirstOrDefaultAsync(u => u.Id == id);
+    private readonly DnDDbContext _db;
+    public EfUserRepository(DnDDbContext db)
+    {
+        _db = db;
+    }
 
-    public Task<User?> GetByUsernameAsync(string username) =>
-        db.Users.FirstOrDefaultAsync(u => u.Username == username);
-
-    public Task<User?> GetByEmailAsync(string email) =>
-        db.Users.FirstOrDefaultAsync(u => u.Email == email);
+    public Task<User?> GetByUsernameAsync(string username)
+    {
+        return _db.Users.FirstOrDefaultAsync(u => u.Username == username); 
+    }
 
     public async Task<User> InsertAsync(User user)
     {
-        db.Users.Add(user);
-        await db.SaveChangesAsync();
+        _db.Users.Add(user);
+        await _db.SaveChangesAsync();
         return user;
     }
 
-    public Task<bool> ExistsAsync(string username, string email) =>
-        db.Users.AnyAsync(u => u.Username == username || u.Email == email);
+    public Task<bool> ExistsAsync(string username, string email)
+    {
+        return _db.Users.AnyAsync(u => u.Username == username || u.Email == email);
+    }
 }

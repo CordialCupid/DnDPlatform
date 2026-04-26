@@ -4,25 +4,34 @@ using DnDPlatform.Repositories.Interfaces;
 using DnDPlatform.Services.Algorithms;
 using DnDPlatform.Services.Events;
 using DnDPlatform.Services.Interfaces;
+using DnDPlatform.Models.Domain;
 using System.Text;
 
 namespace DnDPlatform.Services.Implementations;
 
-public class CharacterService(
-    ICharacterRepository characterRepo,
-    ICharacterSheetRepository sheetRepo,
-    ITemplateRepository templateRepo,
-    IAuditLogService auditLog,
-    IEventBus eventBus) : ICharacterService
+public class CharacterService : ICharacterService
 {
+
+    private readonly ICharacterRepository _characterRepo;
+    private readonly ITemplateRepository _templateRepo;
+    private readonly ICharacterSheetRepository _sheetRepo;
+    private readonly IEventBus _eventBus;
+
+    public CharacterService(ICharacterRepository characterRepo, ITemplateRepository templateRepo, ICharacterSheetRepository sheetRepo ,IEventBus eventBus)
+    {
+        _characterRepo = characterRepo;
+        _templateRepo = templateRepo;
+        _sheetRepo = sheetRepo;
+        _eventBus = eventBus;
+    }
     public async Task<IEnumerable<CharacterDto>> GetCharactersAsync(Guid userId)
     {
-        var characters = await characterRepo.GetAllByOwnerAsync(userId);
+        var characters = await _characterRepo.GetAllByOwnerAsync(userId);
         var dtos = new List<CharacterDto>();
 
         foreach (var c in characters)
         {
-            var sheet = await sheetRepo.GetCurrentAsync(c.Id);
+            var sheet = await _sheetRepo.GetCurrentAsync(c.Id);
             dtos.Add(MapToDto(c, sheet));
         }
 
@@ -31,20 +40,26 @@ public class CharacterService(
 
     public async Task<CharacterDto> GetCharacterAsync(Guid userId, Guid characterId)
     {
-        var character = await characterRepo.GetByIdAsync(characterId)
-            ?? throw new KeyNotFoundException($"Character {characterId} not found.");
+        var character = await _characterRepo.GetByIdAsync(characterId);
+        if (character == null)
+        {
+            throw new KeyNotFoundException($"Character {characterId} not found.");
+        }
 
         if (character.OwnerId != userId)
-            throw new UnauthorizedAccessException("Access denied.");
+        {
+            throw new UnauthorizedAccessException("Access has been denied ");         
+        }
 
-        var sheet = await sheetRepo.GetCurrentAsync(characterId);
+        var sheet = await _sheetRepo.GetCurrentAsync(characterId);
 
-        // Apply calculated fields
         if (sheet is not null)
         {
-            var template = await templateRepo.GetByIdAsync(character.TemplateId);
+            var template = await _templateRepo.GetByIdAsync(character.TemplateId);
             if (template is not null)
-                sheet.JsonBlob = CalculatedFieldEvaluator.Evaluate(template.JsonSchema, sheet.JsonBlob);
+            {
+                sheet.JsonBlob = CalculatedFieldEvaluator.Evaluate(template.JsonSchema, sheet.JsonBlob);            
+            }
         }
 
         return MapToDto(character, sheet);
@@ -52,15 +67,21 @@ public class CharacterService(
 
     public async Task DeleteCharacterAsync(Guid userId, Guid characterId)
     {
-        var character = await characterRepo.GetByIdAsync(characterId)
-            ?? throw new KeyNotFoundException($"Character {characterId} not found.");
-
+        var character = await _characterRepo.GetByIdAsync(characterId);
+        
+        if (character == null)
+        {
+            throw new KeyNotFoundException($"Character {characterId} not found.");
+        }
         if (character.OwnerId != userId)
+        {
             throw new UnauthorizedAccessException("Access denied.");
+            
+        }
 
-        await characterRepo.DeleteAsync(characterId);
+        await _characterRepo.DeleteAsync(characterId);
 
-        await eventBus.PublishAsync(new CharacterDeletedEvent
+        await _eventBus.PublishAsync(new CharacterDeletedEvent
         {
             UserId = userId,
             CharacterId = characterId,
@@ -68,33 +89,7 @@ public class CharacterService(
         });
     }
 
-    public async Task<byte[]> ExportPdfAsync(Guid userId, Guid characterId)
-    {
-        var character = await characterRepo.GetByIdAsync(characterId)
-            ?? throw new KeyNotFoundException($"Character {characterId} not found.");
-
-        if (character.OwnerId != userId)
-            throw new UnauthorizedAccessException("Access denied.");
-
-        var sheet = await sheetRepo.GetCurrentAsync(characterId);
-
-        // Minimal plain-text PDF export (no external PDF library dependency)
-        var sb = new StringBuilder();
-        sb.AppendLine($"Character Sheet: {character.Name}");
-        sb.AppendLine($"Class: {character.Class}  |  Level: {character.Level}");
-        sb.AppendLine($"Template: {character.Template?.Name}");
-        sb.AppendLine($"Backstory: {character.Backstory}");
-        sb.AppendLine();
-        sb.AppendLine("--- Sheet Data ---");
-        sb.AppendLine(sheet?.JsonBlob ?? "{}");
-        sb.AppendLine($"Exported at: {DateTime.UtcNow:u}");
-
-        await auditLog.LogAsync(userId, userId.ToString(), AuditAction.Export, ResourceType.Character, characterId);
-
-        return Encoding.UTF8.GetBytes(sb.ToString());
-    }
-
-    private static CharacterDto MapToDto(Models.Domain.Character c, Models.Domain.CharacterSheet? sheet) => new()
+    private static CharacterDto MapToDto(Character c, CharacterSheet? sheet) => new()
     {
         Id = c.Id,
         Name = c.Name,

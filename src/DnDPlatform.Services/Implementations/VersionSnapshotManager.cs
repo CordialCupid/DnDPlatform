@@ -7,12 +7,22 @@ using DnDPlatform.Services.Interfaces;
 
 namespace DnDPlatform.Services.Implementations;
 
-public class VersionSnapshotManager(
-    ICharacterSheetRepository sheetRepo,
-    ICharacterRepository characterRepo,
-    IAuditLogService auditLog,
-    IEventBus eventBus) : IVersionSnapshotManager
+public class VersionSnapshotManager : IVersionSnapshotManager
 {
+    private readonly ICharacterSheetRepository _sheetRepo;
+    private readonly ICharacterRepository _characterRepo;
+    private readonly IAuditLogService _auditLog;
+
+    private readonly IEventBus _eventBus;
+
+    public VersionSnapshotManager(ICharacterSheetRepository sheetRepo, ICharacterRepository characterRepo, IAuditLogService auditLog, IEventBus eventBus)
+    {
+        _sheetRepo = sheetRepo;
+        _characterRepo = characterRepo;
+        _auditLog = auditLog;
+        _eventBus = eventBus;
+    }
+
     public async Task<SheetVersionDto> InitializeAsync(Guid characterId, string initialBlob)
     {
         var sheet = new CharacterSheet
@@ -24,7 +34,7 @@ public class VersionSnapshotManager(
             IsSnapshot = false,
             CreatedAt = DateTime.UtcNow
         };
-        var saved = await sheetRepo.InsertAsync(sheet);
+        var saved = await _sheetRepo.InsertAsync(sheet);
         return MapToDto(saved);
     }
 
@@ -32,7 +42,7 @@ public class VersionSnapshotManager(
     {
         await EnsureOwnershipAsync(userId, characterId);
 
-        var nextVersion = await sheetRepo.GetNextVersionNumberAsync(characterId);
+        var nextVersion = await _sheetRepo.GetNextVersionNumberAsync(characterId);
         var sheet = new CharacterSheet
         {
             CharacterId = characterId,
@@ -42,16 +52,16 @@ public class VersionSnapshotManager(
             IsSnapshot = false,
             CreatedAt = DateTime.UtcNow
         };
-        var saved = await sheetRepo.InsertAsync(sheet);
+        var saved = await _sheetRepo.InsertAsync(sheet);
 
-        var character = await characterRepo.GetByIdAsync(characterId);
+        var character = await _characterRepo.GetByIdAsync(characterId);
         if (character is not null)
         {
             character.UpdatedAt = DateTime.UtcNow;
-            await characterRepo.UpdateAsync(character);
+            await _characterRepo.UpdateAsync(character);
         }
 
-        await eventBus.PublishAsync(new CharacterSheetSavedEvent
+        await _eventBus.PublishAsync(new CharacterSheetSavedEvent
         {
             UserId = userId,
             CharacterId = characterId,
@@ -67,7 +77,7 @@ public class VersionSnapshotManager(
     {
         await EnsureOwnershipAsync(userId, characterId);
 
-        var nextVersion = await sheetRepo.GetNextVersionNumberAsync(characterId);
+        var nextVersion = await _sheetRepo.GetNextVersionNumberAsync(characterId);
         var sheet = new CharacterSheet
         {
             CharacterId = characterId,
@@ -77,9 +87,9 @@ public class VersionSnapshotManager(
             IsSnapshot = true,
             CreatedAt = DateTime.UtcNow
         };
-        var saved = await sheetRepo.InsertAsync(sheet);
+        var saved = await _sheetRepo.InsertAsync(sheet);
 
-        await eventBus.PublishAsync(new CharacterSheetSavedEvent
+        await _eventBus.PublishAsync(new CharacterSheetSavedEvent
         {
             UserId = userId,
             CharacterId = characterId,
@@ -94,7 +104,7 @@ public class VersionSnapshotManager(
     public async Task<IEnumerable<VersionSummaryDto>> GetVersionHistoryAsync(Guid userId, Guid characterId)
     {
         await EnsureOwnershipAsync(userId, characterId);
-        var sheets = await sheetRepo.GetVersionHistoryAsync(characterId);
+        var sheets = await _sheetRepo.GetVersionHistoryAsync(characterId);
         return sheets.Select(s => new VersionSummaryDto
         {
             Id = s.Id,
@@ -105,53 +115,32 @@ public class VersionSnapshotManager(
         });
     }
 
-    public async Task<SheetVersionDto> RevertAsync(Guid userId, Guid characterId, int targetVersion)
-    {
-        await EnsureOwnershipAsync(userId, characterId);
-
-        var target = await sheetRepo.GetByVersionAsync(characterId, targetVersion)
-            ?? throw new KeyNotFoundException($"Version {targetVersion} not found for character {characterId}.");
-
-        var nextVersion = await sheetRepo.GetNextVersionNumberAsync(characterId);
-        var reverted = new CharacterSheet
-        {
-            CharacterId = characterId,
-            VersionNumber = nextVersion,
-            Label = $"Reverted to v{targetVersion}",
-            JsonBlob = target.JsonBlob,
-            IsSnapshot = false,
-            CreatedAt = DateTime.UtcNow
-        };
-        var saved = await sheetRepo.InsertAsync(reverted);
-
-        await eventBus.PublishAsync(new CharacterSheetSavedEvent
-        {
-            UserId = userId,
-            CharacterId = characterId,
-            SheetId = saved.Id,
-            VersionNumber = saved.VersionNumber,
-            IsSnapshot = false
-        });
-
-        return MapToDto(saved);
-    }
-
+    // method to ensure the passed in user id actually owns the pased in character id character
     private async Task EnsureOwnershipAsync(Guid userId, Guid characterId)
     {
-        var character = await characterRepo.GetByIdAsync(characterId)
-            ?? throw new KeyNotFoundException($"Character {characterId} not found.");
+        var character = await _characterRepo.GetByIdAsync(characterId);
+
+        if (character == null)
+        {
+            throw new KeyNotFoundException($"Character {characterId} not found.");
+        }
         if (character.OwnerId != userId)
-            throw new UnauthorizedAccessException("Access denied.");
+        {
+            throw new UnauthorizedAccessException("Access has been denied.");
+        }
     }
 
-    private static SheetVersionDto MapToDto(CharacterSheet s) => new()
+    private static SheetVersionDto MapToDto(CharacterSheet s)
     {
-        Id = s.Id,
-        CharacterId = s.CharacterId,
-        VersionNumber = s.VersionNumber,
-        Label = s.Label,
-        JsonBlob = s.JsonBlob,
-        IsSnapshot = s.IsSnapshot,
-        CreatedAt = s.CreatedAt
-    };
+        return new()
+        {
+            Id = s.Id,
+            CharacterId = s.CharacterId,
+            VersionNumber = s.VersionNumber,
+            Label = s.Label,
+            JsonBlob = s.JsonBlob,
+            IsSnapshot = s.IsSnapshot,
+            CreatedAt = s.CreatedAt
+        };
+    } 
 }

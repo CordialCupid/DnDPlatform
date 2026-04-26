@@ -10,12 +10,22 @@ using System.Text;
 
 namespace DnDPlatform.Services.Implementations;
 
-public class AuthService(IUserRepository userRepo, IConfiguration config) : IAuthService
+public class AuthService : IAuthService
 {
+    private readonly IUserRepository _userRepo;
+    private readonly IConfiguration _config;
+
+    public AuthService(IUserRepository userRepo, IConfiguration config)
+    {
+        _userRepo = userRepo;
+        _config = config;
+    }
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request)
     {
-        if (await userRepo.ExistsAsync(request.Username, request.Email))
-            throw new InvalidOperationException("Username or email already in use.");
+        if (await _userRepo.ExistsAsync(request.Username, request.Email))
+        {
+            throw new Exception("Username or email already in use.");         
+        }
 
         var user = new User
         {
@@ -26,24 +36,31 @@ public class AuthService(IUserRepository userRepo, IConfiguration config) : IAut
             CreatedAt = DateTime.UtcNow
         };
 
-        await userRepo.InsertAsync(user);
+        await _userRepo.InsertAsync(user);
         return GenerateToken(user);
     }
 
     public async Task<AuthResponse> LoginAsync(LoginRequest request)
     {
-        var user = await userRepo.GetByUsernameAsync(request.Username)
-            ?? throw new UnauthorizedAccessException("Invalid credentials.");
+        var user = await _userRepo.GetByUsernameAsync(request.Username);
+
+        if (user == null)
+        {
+            throw new UnauthorizedAccessException("Invalid credentials.");
+        }
 
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-            throw new UnauthorizedAccessException("Invalid credentials.");
+        {
+            throw new UnauthorizedAccessException("Invalid credentials.");  
+        }
 
         return GenerateToken(user);
     }
 
+    // method to generate new JWT token for newly registered or logged in user
     private AuthResponse GenerateToken(User user)
     {
-        var jwtSettings = config.GetSection("Jwt");
+        var jwtSettings = _config.GetSection("Jwt");
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var expires = DateTime.UtcNow.AddHours(double.Parse(jwtSettings["ExpiresHours"] ?? "24"));

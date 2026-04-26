@@ -13,33 +13,28 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// -- Database
 builder.Services.AddDbContext<DnDDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// -- Repositories
 builder.Services.AddScoped<IUserRepository, EfUserRepository>();
 builder.Services.AddScoped<ICharacterRepository, EfCharacterRepository>();
 builder.Services.AddScoped<ICharacterSheetRepository, EfCharacterSheetRepository>();
 builder.Services.AddScoped<ITemplateRepository, EfTemplateRepository>();
 builder.Services.AddScoped<IAuditLogRepository, EfAuditLogRepository>();
-
-// -- Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ICharacterService, CharacterService>();
 builder.Services.AddScoped<ICharacterCreationService, CharacterCreationService>();
 builder.Services.AddScoped<ITemplateService, TemplateService>();
 builder.Services.AddScoped<IVersionSnapshotManager, VersionSnapshotManager>();
-builder.Services.AddScoped<IDnDInfoService, DnDInfoService>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 
-// -- Event Bus (Observer pattern)
+// event bus for the observer pattern
 builder.Services.AddSingleton<IEventBus, InProcessEventBus>();
 
-// -- Caching
+// enabling caching
 builder.Services.AddMemoryCache();
 
-// -- HTTP Client for D&D 5e API
+// HTTP Client for D&D 5e API
 builder.Services.AddHttpClient("DnD5e", client =>
 {
     client.BaseAddress = new Uri("https://www.dnd5eapi.co");
@@ -47,7 +42,7 @@ builder.Services.AddHttpClient("DnD5e", client =>
     client.Timeout = TimeSpan.FromSeconds(30);
 });
 
-// -- JWT Authentication
+// JWT Authentication for the JWT token
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 var key = Encoding.UTF8.GetBytes(jwtSettings["Key"]!);
 
@@ -69,7 +64,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// -- Controllers
 builder.Services.AddControllers()
     .AddJsonOptions(o =>
     {
@@ -77,14 +71,14 @@ builder.Services.AddControllers()
         o.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
 
-// -- CORS
+// CORS implmentation to work with distributed app
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
         policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
 
 var app = builder.Build();
 
-// -- Wire up Observer/Event subscriptions
+// wire up Observer/Event subscriptions
 var eventBus = app.Services.GetRequiredService<IEventBus>();
 var auditScope = app.Services.CreateScope();
 var auditLogService = auditScope.ServiceProvider.GetRequiredService<IAuditLogService>();
@@ -110,7 +104,6 @@ eventBus.Subscribe<CharacterDeletedEvent>(e =>
         ResourceType.Character, e.CharacterId,
         new { e.CharacterName }));
 
-// -- Middleware pipeline
 if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 
@@ -119,7 +112,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 
-// -- Auto-apply migrations in development
+// apply migrations in development
 if (app.Environment.IsDevelopment())
 {
     using var scope = app.Services.CreateScope();
