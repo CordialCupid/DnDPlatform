@@ -51,7 +51,7 @@ public static class SheetValidationEngine
             // start looping through each field in the fields element in the json
             foreach (var field in fields.EnumerateArray())
             {
-                // retrieves key property 
+
                 if (!field.TryGetProperty("key", out var keyProp))
                 {
                     continue;  
@@ -137,7 +137,6 @@ public static class SheetValidationEngine
         };
     }
 
-    // method to return a bool indicating if 
     private static bool EvaluateCondition(JsonElement condition, JsonElement sheetRoot)
     {
         if (!condition.TryGetProperty("field", out var fieldProp) || !condition.TryGetProperty("value", out var valueProp))

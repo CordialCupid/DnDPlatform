@@ -12,11 +12,11 @@
 
 <PageTitle>Templates</PageTitle>
 
-<div class="container mt-5">
+<div class="container mt-5 clickable-hand">
     <div class="row mb-4">
         <div class="col">
-            <h1 class="display-4 text-primary">Templates</h1>
-            <p class="lead text-muted">List your templates or create a new one</p>
+            <h1 class="display-4 fw-bold">Templates</h1>
+            <p class="lead text-muted fw-lighter">List your templates or create a new one</p>
         </div>
     </div>
 
@@ -39,7 +39,7 @@
 
                         <div class="mb-3">
                             <label for="System" class="form-label">System</label>
-                            <InputText type="text" step="0.1" class="form-control" name="System"
+                            <InputText type="text" step="0.1" class="form-control" id="System" name="System"
                                 placeholder="System (e.g. dnd5e)" @bind-Value="template.System"/>
                             <ValidationMessage For="@(() => template.System)" />
                         </div>
@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="submit" class="btn btn-primary">Save Template</button>
+                            <button type="submit" class="btn btn-dark">Save Template</button>
                         </div>
                     </EditForm>
                 </div>
@@ -130,7 +130,7 @@
     private string? token = "";
     private bool _dialogOpenDetail; 
     private string _dialogCssForDetail => _dialogOpenDetail ? "show" : "hide"; 
-    private JsonDocument? templateSchema;
+
     private async Task SubmitButton() {
         var CreateTemplateResponse = await createTemplateRequest();
         if (CreateTemplateResponse.IsSuccessStatusCode) {

@@ -6,6 +6,10 @@ h1:focus {
     outline: none;
 }
 
+.clickable-hand {
+        cursor: url('/Photos/cursor_gray.png'), auto;
+}
+
 a, .btn-link {
     color: #0071c1;
 }

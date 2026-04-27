@@ -29,14 +29,7 @@ public class TemplatesController : AuthorizedControllerBase
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<TemplateDto>> GetById(Guid id)
     {
-        try
-        {
-            return Ok(await _templateService.GetTemplateAsync(id));
-        }
-        catch (KeyNotFoundException ex) 
-        { 
-            return NotFound(new { message = ex.Message }); 
-        }
+        return Ok(await _templateService.GetTemplateAsync(id));
     }
 
     // endpoint to create a template

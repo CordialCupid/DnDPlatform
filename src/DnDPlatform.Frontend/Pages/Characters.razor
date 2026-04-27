@@ -10,12 +10,13 @@
 @using System.Text
 @using System.Net
 @using DnDPlatform.Frontend.Services
+@using System.Net.Cache
 
 <PageTitle>Characters</PageTitle>
 
 @if (!isLoading)
 {
-    <div class="container mt-4">
+    <div class="container mt-4 clickable-hand">
         <div class="row">
             <div class="text-center">
                 <h1 class="fw-bold">Create A New Character:</h1>
@@ -50,7 +51,7 @@
                 @foreach (CharacterResponseModel c in accountCharacters) {
                     <div class="col">
                         <div class="card h-100 shadow-sm ">
-                            <div class="card-header">
+                            <div class="card-header bg-dark text-white">
                                 <h5 class="card-title">@c.name</h5>
                             </div>
                             <div class="card-body"> 
@@ -67,8 +68,8 @@
                                     <strong>Template Name:</strong> @c.templateName<br>
                                 </p>
                             </div>
-                            <div class="card-footer">
-                                <button type="button" class="btn btn-primary rounded" style="border: none;" @onclick="(async) => OnDetailsClick(c.id.ToString())">Details</button>
+                            <div class="card-footer bg-dark text-white">
+                                <button type="button" class="btn btn-secondary rounded" style="border: none;" @onclick="(async) => OnDetailsClick(c.id.ToString())">Details</button>
                             </div>
                         </div>
                     </div>
@@ -85,7 +86,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-dark">
                     <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Create Character</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => this.CloseDialog(ref _dialogOpenCreate)"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => CloseDialog(ref _dialogOpenCreate)"></button>
                 </div>
                 <div class="modal-body">
                     <EditForm Model="@model" OnValidSubmit="@Submission" FormName="createCharForm" id="createCharForm">
@@ -121,7 +122,7 @@
                     </EditForm>
                 </div>
                 <div class="modal-footer bg-dark">
-                    <button type="button" class="btn btn-secondary text-white" @onclick="() => this.CloseDialog(ref _dialogOpenCreate)">Close</button>
+                    <button type="button" class="btn btn-secondary text-white" @onclick="() => CloseDialog(ref _dialogOpenCreate)">Close</button>
                     <button type="submit" form="createCharForm" class="btn btn-primary text-white">Save changes</button>
                 </div>
             </div>
@@ -134,7 +135,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-dark">
                     <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Character Details</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => CloseDialog(ref _dialogOpenDetail)"></button>
                 </div>
                 <div class="modal-body">
                     <p class="card-text">
@@ -152,12 +153,12 @@
                         <strong>Sheet Id:</strong> @detailCharacter.currentSheet.id<br>
                     </p>
                     <p class="card-text">
-                        <strong>Sheet Version:</strong> @detailCharacter.currentSheet.versionNumber<br>
+                        <strong>Current Sheet Version:</strong> @detailCharacter.currentSheet.versionNumber<br>
                     </p>
                     }
                 </div>
                 <div class="modal-footer bg-dark">
-                    <button type="button" class="btn btn-secondary text-white" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)">Close</button>
+                    <button type="button" class="btn btn-secondary text-white" @onclick="() => CloseDialog(ref _dialogOpenDetail)">Close</button>
                     <button type="button" class="btn btn-danger" @onclick="(async) => DeleteCharacter(detailCharacter.id.ToString())">Delete Character</button>
                 </div>
             </div>
@@ -271,13 +272,6 @@
 
         return response;
     }
-
-    @* private async Task<HttpResponseMessage> SaveSnapshot()
-    {
-        var request = new HttpRequestMessage(HttpMethod.Post, "/characters/{id}/snapshot");
-        var postBody = new {};
-        
-    } *@
 }
 
 <style>
@@ -287,6 +281,11 @@
 
     .hide {
         display: none;
+    }
+
+    .icon-menu-arrow {
+        text-align: right;
+        cursor: pointer;
     }
 </style>
 
