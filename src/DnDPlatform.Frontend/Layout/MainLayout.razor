@@ -15,9 +15,9 @@
 else
 {
     <div class="page">
-        
-        <div class="sidebar" style= "@IconMenuCssClass">
-            <NavMenu />
+
+        <div class="sidebar" style="@IconMenuCssClass">
+            <NavMenu ShowIconMenu="ToggleIconMenu" />
         </div>
 
         <main>
@@ -72,10 +72,8 @@ else
                 
             }
         }
-        if (loginService.MeAccount != null )
-        {
-            isLoading = false;
-        }
+
+        isLoading = false;
     }
 
     private async Task<HttpResponseMessage> meRequest() {
