@@ -67,10 +67,11 @@ else
             {
                 LoginSingletonService.LoggedIn = true;
                 using Stream stream = await response.Content.ReadAsStreamAsync();
-                LoginSingletonService.MeAccount = JsonSerializer.Deserialize<MeStructure>(stream)!;     
-                
+                LoginSingletonService.MeAccount = JsonSerializer.Deserialize<MeStructure>(stream)!;
+
             }
         }
+    
 
         isLoading = false;
     }
