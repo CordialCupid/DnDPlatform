@@ -56,6 +56,14 @@
     top: -2px;
 }
 
+.sign-text {
+    color: #ffd140;
+}
+
+.LoginRegisterButton {
+    z-index: 1;
+}
+
 .sign-link {
     background-image: url('/Photos/sign.png');
     background-size: contain;

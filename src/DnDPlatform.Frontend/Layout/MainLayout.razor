@@ -23,17 +23,16 @@ else
         <main>
             @if(!LoginSingletonService.LoggedIn) {
                 <div class="top-row px-4">
-                    <a href="/register">Register</a>
-                    <a href="/login">Login</a>
+                    <a href="/register" class="LoginRegisterButton" style="z-index: 1;">Register</a>
+                    <a href="/login" class="LoginRegisterButton" style="z-index: 1;">Login</a>
+                    <img src="/Photos/TopHeader.png" class="topbar-bg" alt="Tavern Bartop" />
                 </div>
             }
             else {
                 <div class="top-row px-4">
                     <img src="/Photos/TopHeader.png" class="topbar-bg" alt="Tavern Bartop" />
-                    <p class="m-0">Hello @LoginSingletonService.MeAccount?.username </p>
-                    <button style="background-color: #F7F7F7; border: none;" type="button" @onclick="Logout">
-                        Logout
-                    </button>
+                    <p class="m-0 helloUser">Hello @LoginSingletonService.MeAccount?.username </p>
+                    <button class="logout-button" type="button" @onclick="Logout" aria-label="Logout">Logout</button>
                 </div>
             }
             <article class="content px-4">

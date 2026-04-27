@@ -13,34 +13,41 @@
 @using DnDPlatform.Frontend.Models.ResponseModels
 
 <PageTitle>Login</PageTitle>
+<div class="loginWHOLE">
+    <div class="LoginBalancer">
+        <div class="container mt-5 mr-0 mb-5">
+            <div class="row mb-4">
+                <div class="col">
+                    <h1 class="display-4 text-primary bo-text-color">Login to Your Account</h1>
+                </div>
+            </div>
 
-<div class="container mt-5 mr-0 mb-5">
-    <div class="row mb-4">
-        <div class="col">
-            <h1 class="display-4 text-primary">Login to Your Account</h1>
+            <div class="row">
+                <EditForm Model="@model" OnValidSubmit="@SubmitButton">
+                    <DataAnnotationsValidator />
+                    <div class="mb-2">
+                        <label for="loginUsername" style="color: #fed03e;">Username</label><br>
+                        <InputText class="rounded bg-light" style="border: none" placeholder="Username" id="loginUsername" @bind-Value="model.Username" /><br>
+                        <ValidationMessage For="@(() => model.Username)" />
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="loginPassword" style="color:#fed03e">Password</label><br>
+                        <InputText class="rounded bg-light" style="border: none" type="password" placeholder="Password" id="loginPassword" @bind-Value="model.Password" /><br>
+                        <ValidationMessage For="@(() => model.Password)" />
+                    </div>
+
+                    <div class="mt-3">
+                        <button class="submitButton" type="submit">Submit</button>
+                        <button type="button" @onclick="CancelButton" class="submitButton">Cancel</button>
+                    </div>
+                </EditForm>
+            </div>
         </div>
-    </div>
 
-    <div class="row">
-        <EditForm Model="@model" OnValidSubmit="@SubmitButton">
-            <DataAnnotationsValidator />
-            <div class="mb-2">
-                <label for="loginUsername">Username</label><br>
-                <InputText class="rounded bg-light" style="border: none" placeholder="Username" id="loginUsername" @bind-Value="model.Username"/><br>
-                <ValidationMessage For="@(() => model.Username)" />
-            </div>
-
-            <div class="mb-2">
-                <label for="loginPassword">Password</label><br>
-                <InputText class="rounded bg-light" style="border: none" type="password" placeholder="Password" id="loginPassword" @bind-Value="model.Password"/><br>
-                <ValidationMessage For="@(() => model.Password)" />
-            </div>
-
-            <div class="mt-3">
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" @onclick="CancelButton" class="btn btn-secondary">Cancel</button>
-            </div>
-        </EditForm>
+        <div>
+            <img src="/Photos/loginwizardfroggy.gif" class="" alt="frog Wizard Image" />
+        </div>
     </div>
 </div>
 

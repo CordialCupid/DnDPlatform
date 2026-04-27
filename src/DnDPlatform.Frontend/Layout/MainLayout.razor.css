@@ -17,6 +17,33 @@ main {
     z-index: 100;
 }
 
+.sign-text {
+    color:#ffd140;
+}
+
+.logout-button, .LoginRegisterButton, .helloUser{
+    background-image: url('/Photos/sign.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    color: #ffd140; 
+    width: 10%;
+    height: 100%;
+    padding: 0;
+    border: none;
+    justify-content: space-evenly;
+    align-items: center;
+    background-color: transparent;
+    cursor: pointer;
+    display: flex;
+    vertical-align: middle;
+}
+
+.logout-button:hover, .LoginRegisterButton:hover {
+    background-image: url('/Photos/signHOver.png');
+}
+
+
 .top-row {
     background-color: #f7f7f7;
     border-bottom: 1px solid #d6d5d5;
@@ -72,7 +99,7 @@ main {
         background: transparent; 
         border-bottom: none;
         overflow: visible;
-        z-index: 2;
+        z-index: 200;
     }
 
     .topbar-bg {
@@ -89,7 +116,6 @@ main {
     .top-row p,
     .top-row button {
         position: relative;
-        z-index: 2;
     }
 
     .top-row.auth ::deep a:first-child {
@@ -98,8 +124,13 @@ main {
         width: 0;
     }
 
-    .top-row, article {
+    .top-row {
         padding-left: 2rem !important;
         padding-right: 1.5rem !important;
+    }
+
+    article {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
     }
 }
