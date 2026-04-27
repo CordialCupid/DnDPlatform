@@ -1,9 +1,12 @@
+using System.Text.Json.Serialization;
+
 namespace DnDPlatform.Models.DTOs.Characters;
 
 public class CharacterDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; } = string.Empty;
+
     public string Class { get; set; } = string.Empty;
     public string Backstory { get; set; } = string.Empty;
     public int Level { get; set; }

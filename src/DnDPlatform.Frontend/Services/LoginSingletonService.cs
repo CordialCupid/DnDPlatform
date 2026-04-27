@@ -1,9 +1,9 @@
-using DnDPlatform.Frontend.Models.ReponseModels;
+using DnDPlatform.Frontend.Models.ResponseModels;
 
 namespace DnDPlatform.Frontend.Services;
-public class LoginSingletonService
+public static class LoginSingletonService
 {
-    public bool LoggedIn {get;set;} = false;
+    public static bool LoggedIn {get;set;} = false;
 
-    public MeStructure? MeAccount {get;set;}
+    public static MeStructure? MeAccount {get;set;}
 }

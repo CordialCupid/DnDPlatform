@@ -11,6 +11,7 @@ public static class SheetValidationEngine
     {
         var result = new SheetValidationResult();
 
+        // attempt to convert passed in json sheet data and parse into json
         JsonDocument? sheetDoc;
         try
         {
@@ -18,10 +19,11 @@ public static class SheetValidationEngine
         }
         catch
         {
-            result.Errors.Add(new ValidationError { Field = "_root", Message = "Sheet data is not valid JSON." });
+            result.Errors.Add(new ValidationError { Field = "Root of the json blob", Message = "Sheet blob is not valid JSON" });
             return result;
         }
 
+        // try to parse the json schema of the given template 
         JsonDocument? schemaDoc;
         try
         {
@@ -32,22 +34,29 @@ public static class SheetValidationEngine
             return result; 
         }
 
+        // this next section is intended to compare the passed in sheet blobl and its fields/properties against the tempaltes json schema for validation
         using (sheetDoc)
         using (schemaDoc)
         {
+            // looks for the fields property in the schema json document, this holds the validation for fields that the user passes in to actually define a template for their character
+            // returns the empty validaiton result object because if the schema has no fields property defined, then there is nothing to compare the sheet against
             if (!schemaDoc.RootElement.TryGetProperty("fields", out var fields))
             {
                 return result;          
             }
 
+            // start at the outermost level of the sheet json 
             var sheetRoot = sheetDoc.RootElement;
 
+            // start looping through each field in the fields element in the json
             foreach (var field in fields.EnumerateArray())
             {
+                // retrieves key property 
                 if (!field.TryGetProperty("key", out var keyProp))
                 {
                     continue;  
                 }
+
 
                 var key = keyProp.GetString() ?? string.Empty;
                 var required = field.TryGetProperty("required", out var req) && req.GetBoolean();
@@ -128,6 +137,7 @@ public static class SheetValidationEngine
         };
     }
 
+    // method to return a bool indicating if 
     private static bool EvaluateCondition(JsonElement condition, JsonElement sheetRoot)
     {
         if (!condition.TryGetProperty("field", out var fieldProp) || !condition.TryGetProperty("value", out var valueProp))

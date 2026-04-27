@@ -3,167 +3,237 @@
 @inject HttpClient Http
 @inject NavigationManager navManager
 @inject IJSRuntime jsRuntime
-@inject DnDPlatform.Frontend.Services.LoginSingletonService loginService
 @using BlazorBootstrap;
 @using DnDPlatform.Frontend.Models.FormModels
-@using DnDPlatform.Frontend.Models.ReponseModels
 @using DnDPlatform.Frontend.Models.ResponseModels
 @using System.Text.Json
 @using System.Text
 @using System.Net
+@using DnDPlatform.Frontend.Services
 
 <PageTitle>Characters</PageTitle>
 
-<div class="container mt-4">
-    <div class="row">
-        <div class="text-center">
-            <h1 class="fw-bold">Create A New Character:</h1>
-            <p class="fw-lighter">Click the button below to get started on making a new character...</p>
-        </div>
-    </div>
-    <div class="row">
-        <div class="d-flex justify-content-center">
-            <button disabled="@_dialogOpen" class="btn btn-dark mx-auto" @onclick="this.OpenDialog">New Character</button> 
-        </div>
-    </div>
-    <div class="row mt-5">
-        <div class="mt-2">
-            <h3 class="text-decoration-underline">Characters:</h3>
-        </div>
-    </div>
-    <div class="mt-5">
-        @if(accountCharacters.Count() < 1)
-        {
-            <div class="row">
-                <div class="col text-center py-5">
-                    <div class="text-muted">
-                        <i class="bi bi-inbox" style="font-size: 4rem;"></i>
-                        <h4 class="mt-3">No Characters Found...</h4>
-                    </div>
-                </div>
+@if (!isLoading)
+{
+    <div class="container mt-4">
+        <div class="row">
+            <div class="text-center">
+                <h1 class="fw-bold">Create A New Character:</h1>
+                <p class="fw-lighter">Click the button below to get started on making a new character...</p>
             </div>
-        }
-        else
-        {
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @foreach (CharacterResponseModel c in accountCharacters) {
-                <div class="col">
-                    <div class="card h-100 shadow-sm bg-dark">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary">@c.Name</h5>
-                            <p class="card-text">
-                                <strong>Class:</strong> @c.Class<br>
-                            </p>
-                            <p class="card-text">
-                                <strong>BackStory:</strong> @c.BackStory<br>
-                            </p>
-                            <p class="card-text">
-                                <strong>Level:</strong> @c.Level<br>
-                            </p>
-                            <p class="card-text">
-                                <strong>Template Used:</strong> @c.TemplateName<br>
-                            </p>
+        </div>
+        <div class="row">
+            <div class="d-flex justify-content-center">
+                <button disabled="@_dialogOpenCreate" class="btn btn-dark mx-auto" @onclick="() => OpenDialog(ref _dialogOpenCreate)">New Character</button> 
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="mt-2">
+                <h3 class="text-decoration-underline">Characters:</h3>
+            </div>
+        </div>
+        <div class="mt-5">
+            @if(accountCharacters.Count() < 1)
+            {
+                <div class="row">
+                    <div class="col text-center py-5">
+                        <div class="text-muted">
+                            <i class="bi bi-inbox" style="font-size: 4rem;"></i>
+                            <h4 class="mt-3">No Characters Found...</h4>
                         </div>
                     </div>
                 </div>
-            }   
-        </div>
-        }
-    </div>
-</div>
-
-
-
-<div class="modal fade @_dialogCss" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-dark">
-                <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Create Character</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="this.CloseDialog"></button>
+            }
+            else
+            {
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (CharacterResponseModel c in accountCharacters) {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm ">
+                            <div class="card-header">
+                                <h5 class="card-title">@c.name</h5>
+                            </div>
+                            <div class="card-body"> 
+                                <p class="card-text">
+                                    <strong>Level:</strong> @c.level<br>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Class:</strong> @c.Class<br>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Id:</strong> @c.id<br>
+                                </p>
+                                <p class="card-text">
+                                    <strong>Template Name:</strong> @c.templateName<br>
+                                </p>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-primary rounded" style="border: none;" @onclick="(async) => OnDetailsClick(c.id.ToString())">Details</button>
+                            </div>
+                        </div>
+                    </div>
+                }   
             </div>
-            <div class="modal-body">
-                <EditForm Model="@model" OnValidSubmit="@Submission" FormName="createCharForm" id="createCharForm">
-                    <DataAnnotationsValidator/>
-
-                    <label for="nameInput">Character Name:</label><br />
-                    <InputText class="rounded bg-light" style="border: none" id="nameInput" @bind-Value="model.CharacterName" placeholder="Name..."/>
-                    <ValidationMessage For="@(() => model.CharacterName)"/>
-
-                    <br/> 
-                    <label for="classInput">Character Class:</label>
-                    <br/> 
-                    <InputText class="rounded bg-light" style="border: none" id="classInput" @bind-Value="model.Class" placeholder="Class..."></InputText>
-                    <ValidationMessage For="@(() => model.Class)" />
-
-                    <br/> 
-                    <label for="levelInput">Character Level:</label>
-                    <br/> 
-                    <InputNumber class="rounded bg-light" style="border: none" id="levelInput" @bind-Value="model.Level"></InputNumber>
-                    <ValidationMessage For="@(() => model.Level)"/>
-
-                    <br />
-                    <label for="idInput">Template Id:</label><br />
-                    <InputText class="rounded bg-light" style="border: none" id="idInput" @bind-Value="model.TemplateId" placeholder="Template..."/>
-                    <ValidationMessage For="@(() => model.TemplateId)"/>
-
-                    <br/> 
-                    <label for="backStoryInput">Character BackStory</label>
-                    <br/> 
-                    <InputTextArea class="rounded bg-light" style="width: 100%; border: none" id="backStoryInput" @bind-Value="model.BackStory" placeholder="Enter backstory..."></InputTextArea>
-                    <ValidationMessage For="@(() => model.BackStory)"/>
-                    
-                </EditForm>
-            </div>
-            <div class="modal-footer bg-dark">
-                <button type="button" class="btn btn-secondary text-white" @onclick="this.CloseDialog">Close</button>
-                <button type="submit" form="createCharForm" class="btn btn-primary text-white">Save changes</button>
-            </div>
+            }
         </div>
     </div>
-</div>
 
 
+    @*Modal for create character*@
+    <div class="modal fade @_dialogCssForCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Create Character</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => this.CloseDialog(ref _dialogOpenCreate)"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="@model" OnValidSubmit="@Submission" FormName="createCharForm" id="createCharForm">
+                        <DataAnnotationsValidator/>
+
+                        <label for="nameInput">Character Name:</label><br />
+                        <InputText class="rounded bg-light" style="border: none" id="nameInput" @bind-Value="model.CharacterName" placeholder="Name..."/>
+                        <ValidationMessage For="@(() => model.CharacterName)"/>
+
+                        <br/> 
+                        <label for="classInput">Character Class:</label>
+                        <br/> 
+                        <InputText class="rounded bg-light" style="border: none" id="classInput" @bind-Value="model.Class" placeholder="Class..."></InputText>
+                        <ValidationMessage For="@(() => model.Class)" />
+
+                        <br/> 
+                        <label for="levelInput">Character Level:</label>
+                        <br/> 
+                        <InputNumber class="rounded bg-light" style="border: none" id="levelInput" @bind-Value="model.Level"></InputNumber>
+                        <ValidationMessage For="@(() => model.Level)"/>
+
+                        <br />
+                        <label for="idInput">Template Id:</label><br />
+                        <InputText class="rounded bg-light" style="border: none" id="idInput" @bind-Value="model.TemplateId" placeholder="Template..."/>
+                        <ValidationMessage For="@(() => model.TemplateId)"/>
+
+                        <br/> 
+                        <label for="backStoryInput">Character BackStory</label>
+                        <br/> 
+                        <InputTextArea class="rounded bg-light" style="width: 100%; border: none" id="backStoryInput" @bind-Value="model.BackStory" placeholder="Enter backstory..."></InputTextArea>
+                        <ValidationMessage For="@(() => model.BackStory)"/>
+                        
+                    </EditForm>
+                </div>
+                <div class="modal-footer bg-dark">
+                    <button type="button" class="btn btn-secondary text-white" @onclick="() => this.CloseDialog(ref _dialogOpenCreate)">Close</button>
+                    <button type="submit" form="createCharForm" class="btn btn-primary text-white">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Modal for character details*@
+    <div class="modal fade @_dialogCssForDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Character Details</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="card-text">
+                        <strong>BackStory:</strong> @detailCharacter.backstory<br>
+                    </p>
+                    <p class="card-text">
+                        <strong>Created At:</strong> @detailCharacter.createdAt<br>
+                    </p>
+                    @if(detailCharacter.currentSheet != null)
+                    {
+                    <p class="card-text">
+                        <strong>Sheet Label:</strong> @detailCharacter.currentSheet.label<br>
+                    </p>
+                    <p class="card-text">
+                        <strong>Sheet Id:</strong> @detailCharacter.currentSheet.id<br>
+                    </p>
+                    <p class="card-text">
+                        <strong>Sheet Version:</strong> @detailCharacter.currentSheet.versionNumber<br>
+                    </p>
+                    }
+                </div>
+                <div class="modal-footer bg-dark">
+                    <button type="button" class="btn btn-secondary text-white" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)">Close</button>
+                    <button type="button" class="btn btn-danger" @onclick="(async) => DeleteCharacter(detailCharacter.id.ToString())">Delete Character</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
 @code {
     private CreateCharacterModel model = new();
-    private bool _dialogOpen;
-    private string _dialogCss => _dialogOpen ? "show" : "hide"; 
+
+    //separate bool field variables for opening and closing both modals
+    private bool _dialogOpenCreate;
+    private bool _dialogOpenDetail;
+    private string _dialogCssForCreate => _dialogOpenCreate ? "show" : "hide"; 
+    private string _dialogCssForDetail => _dialogOpenDetail ? "show" : "hide"; 
     private List<CharacterResponseModel> accountCharacters = new List<CharacterResponseModel>();
+    private CharacterResponseModel detailCharacter = new();
     public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
     private string Token = "";
+    private bool isLoading = false;
 
     protected override async Task OnInitializedAsync()
     {    
-        if(loginService.LoggedIn)
+        isLoading = true;
+        if(LoginSingletonService.LoggedIn)
         {
             Token = await GetFromLocalStorage("token") ?? "";
             var response = await GetCharacters();
             if (response.IsSuccessStatusCode)
             {
-
+                var stream = await response.Content.ReadAsStringAsync();
+                accountCharacters = JsonSerializer.Deserialize<List<CharacterResponseModel>>(stream) ?? new List<CharacterResponseModel>();
             }       
-            return;
+            isLoading = false;
         }
         else{
+            isLoading = false;
             navManager.NavigateTo("/register");
-        }
+        } 
     }
 
-    private Task OpenDialog()
+    private Task OpenDialog(ref bool modalBool)
     {
-        _dialogOpen = true;
+        modalBool = true;
         return Task.CompletedTask;
     }
 
-    private Task CloseDialog()
+    private Task CloseDialog(ref bool modalBool)
     {
-        _dialogOpen = false;
+        modalBool = false;
         return Task.CompletedTask;
     }
 
     private async Task Submission()
     {
         var response = await CreateCharacterPost();
-        await CloseDialog();
+        await CloseDialog(ref _dialogOpenCreate);
+    }
+
+    private async Task OnDetailsClick(string charId)
+    {
+        var response = await GetSingularCharacter(charId);
+        if(response.IsSuccessStatusCode)
+        {
+            var stream = await response.Content.ReadAsStringAsync();
+            detailCharacter = JsonSerializer.Deserialize<CharacterResponseModel>(stream) ?? new();
+            await OpenDialog(ref _dialogOpenDetail);
+        }
+    }
+
+    private async Task DeleteCharacter()
+    {
+        var response = await DeleteCharacter(detailCharacter.id.ToString());
+        await CloseDialog(ref _dialogOpenDetail);
+        detailCharacter = new();
+        StateHasChanged();
     }
 
     private async Task<HttpResponseMessage> CreateCharacterPost()
@@ -184,6 +254,30 @@
 
         return response;
     }
+    private async Task<HttpResponseMessage> GetSingularCharacter(string id)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/api/characters/{id}");
+        request.Headers.Add("Authorization", $"Bearer {Token}");
+        var response = await Http.SendAsync(request);
+
+        return response;
+    }
+
+    private async Task<HttpResponseMessage> DeleteCharacter(string id)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Delete, $"/api/characters/{id}");
+        request.Headers.Add("Authorization", $"Bearer {Token}");
+        var response = await Http.SendAsync(request);
+
+        return response;
+    }
+
+    @* private async Task<HttpResponseMessage> SaveSnapshot()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, "/characters/{id}/snapshot");
+        var postBody = new {};
+        
+    } *@
 }
 
 <style>

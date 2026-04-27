@@ -20,8 +20,7 @@ public class TemplatesController : AuthorizedControllerBase
     // endpoint to get all templates
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TemplateDto>>> GetAll([FromQuery] string? system)
-    {
-        
+    {  
         return Ok(await _templateService.GetTemplatesAsync(system));
     }
 
@@ -44,15 +43,8 @@ public class TemplatesController : AuthorizedControllerBase
     [HttpPost]
     public async Task<ActionResult<TemplateDto>> Create(CreateTemplateRequest request)
     {
-        try
-        {
-            var template = await _templateService.CreateTemplateAsync(CurrentUserId, request);
-            
-            return CreatedAtAction(nameof(GetById), new { id = template.Id }, template);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new { message = ex.Message });
-        }
+        var template = await _templateService.CreateTemplateAsync(CurrentUserId, request);
+        
+        return CreatedAtAction(nameof(GetById), new { id = template.Id }, template);
     }
 }

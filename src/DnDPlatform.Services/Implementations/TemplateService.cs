@@ -34,6 +34,7 @@ public class TemplateService : ITemplateService
 
     public async Task<TemplateDto> CreateTemplateAsync(Guid userId, CreateTemplateRequest request)
     {
+
         try 
         { 
             JsonDocument.Parse(request.JsonSchema).Dispose(); 
@@ -46,7 +47,7 @@ public class TemplateService : ITemplateService
         try 
         { 
             JsonDocument.Parse(request.DefaultLayoutJson).Dispose(); 
-            }
+        }
         catch 
         { 
             throw new ArgumentException("DefaultLayoutJson is not valid JSON"); 

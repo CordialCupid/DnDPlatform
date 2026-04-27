@@ -2,10 +2,10 @@
 @inject IJSRuntime jsRuntime
 @inject HttpClient Client
 @inject NavigationManager navManager
-@inject DnDPlatform.Frontend.Services.LoginSingletonService loginService
 @using System.Text.Json
 @using System.Text
 @using DnDPlatform.Frontend.Models.FormModels;
+@using DnDPlatform.Frontend.Services
 
 <PageTitle>Home</PageTitle>
 
@@ -19,7 +19,7 @@
     private string token = "";
     protected override async Task OnInitializedAsync()
     {
-        if(loginService.LoggedIn)
+        if(LoginSingletonService.LoggedIn)
         {
             return;
         }
