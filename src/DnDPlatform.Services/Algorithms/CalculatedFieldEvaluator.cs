@@ -122,7 +122,10 @@ public static class CalculatedFieldEvaluator
 
         void Visit(string key)
         {
-            if (visited.Contains(key)) return;
+            if (visited.Contains(key)) 
+            {
+                return;
+            }
             visited.Add(key);
 
             if (formulas.TryGetValue(key, out var formula))
@@ -130,7 +133,9 @@ public static class CalculatedFieldEvaluator
                 foreach (Match m in TokenPattern.Matches(formula))
                 {
                     if (formulas.ContainsKey(m.Value))
-                        Visit(m.Value);
+                    {
+                        Visit(m.Value);          
+                    }
                 }
             }
 

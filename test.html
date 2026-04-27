@@ -225,6 +225,7 @@ function clearToken() {
 async function req(method, path, body) {
   const headers = { 'Content-Type': 'application/json' };
   if (token) headers['Authorization'] = 'Bearer ' + token;
+  console.log(body)
   const t0 = Date.now();
   let res, data;
   try {
@@ -281,7 +282,9 @@ async function createTemplate() {
   let fields;
   try { fields = JSON.parse(v('tc-fields')); }
   catch { showResponse(400, { error: 'Invalid JSON in fields' }, 0); return; }
-  await req('POST', '/templates', { name: v('tc-name'), system: v('tc-system'), fields });
+
+  let sub = JSON.stringify(fields);
+  await req('POST', '/templates', { name: v('tc-name'), system: v('tc-system'), sub});
 }
 
 async function createCharacter() {

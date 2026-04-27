@@ -13,7 +13,6 @@ builder.Services.AddScoped(sp => new HttpClient
 { 
     BaseAddress = new Uri("http://localhost:5024/api") 
 });
-builder.Services.AddSingleton<LoginSingletonService>();
 
 await builder.Build().RunAsync();
     

@@ -43,12 +43,12 @@ public class CharacterService : ICharacterService
         var character = await _characterRepo.GetByIdAsync(characterId);
         if (character == null)
         {
-            throw new KeyNotFoundException($"Character {characterId} not found.");
+            throw new KeyNotFoundException($"Character {characterId} could not be found.");
         }
 
         if (character.OwnerId != userId)
         {
-            throw new UnauthorizedAccessException("Access has been denied ");         
+            throw new UnauthorizedAccessException("Access has been denied, you dont own this character!");         
         }
 
         var sheet = await _sheetRepo.GetCurrentAsync(characterId);

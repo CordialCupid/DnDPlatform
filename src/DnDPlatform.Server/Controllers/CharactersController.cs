@@ -63,19 +63,20 @@ public class CharactersController : AuthorizedControllerBase
         }
     }
 
-    // Endpoint for saving a sheet
+    // Endpoint for saving a new character sheet
     [HttpPut("{id:guid}/sheet")]
     public async Task<ActionResult<SheetVersionDto>> SaveSheet(Guid id, SaveSheetRequest request)
     {
         try
         {
-            // Run validation before saving
             var character = await _characterService.GetCharacterAsync(CurrentUserId, id);
+            
+            // validate whether the save sheet request contains values for the json schema defined in the template
+            // e.g. if the template defined strength and it was required, then the charcater sheet save must have that field in there 
             var validation = await _templateService.ValidateSheetAsync(character.TemplateId, request.SheetData);
             if (!validation.IsValid)
             {
-                return UnprocessableEntity(validation.Errors);
-      
+                return UnprocessableEntity(validation.Errors);   
             }
 
             var version = await _versionManager.SaveCurrentAsync(CurrentUserId, id, request.SheetData);
@@ -122,7 +123,7 @@ public class CharactersController : AuthorizedControllerBase
         }
     }
 
-    // Endpoint for getting the versions
+    // Endpoint for getting the versions of a character
     [HttpGet("{id:guid}/versions")]
     public async Task<ActionResult<IEnumerable<VersionSummaryDto>>> GetVersions(Guid id)
     {
@@ -139,18 +140,6 @@ public class CharactersController : AuthorizedControllerBase
             return Forbid(); 
         }
     }
-
-    // [HttpPost("{id:guid}/revert/{version:int}")]
-    // public async Task<ActionResult<SheetVersionDto>> Revert(Guid id, int version)
-    // {
-    //     try
-    //     {
-    //         return Ok(await _versionManager.RevertAsync(CurrentUserId, id, version));
-    //     }
-    //     catch (KeyNotFoundException ex) { return NotFound(new { message = ex.Message }); }
-
-    //     catch (UnauthorizedAccessException) { return Forbid(); }
-    // }
 
     // Delete character endpoint
     [HttpDelete("{id:guid}")]
