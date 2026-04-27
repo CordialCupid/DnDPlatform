@@ -7,6 +7,9 @@
 @using DnDPlatform.Frontend.Models.ResponseModels;
 @using DnDPlatform.Frontend.Pages
 @using DnDPlatform.Frontend.Services
+@using Newtonsoft.Json.Schema
+@using Newtonsoft.Json.Linq
+
 
 @if(isLoading)
 {
@@ -32,7 +35,7 @@ else
                     <img src="/Photos/TopHeader.png" class="topbar-bg" alt="Tavern Bartop" />
                     <p class="m-0">Hello @LoginSingletonService.MeAccount?.username </p>
                     <button style="background-color: #F7F7F7; border: none;" type="button" @onclick="Logout">
-                        Logout
+                        LogOut
                     </button>
                 </div>
             }
@@ -63,6 +66,7 @@ else
         isLoading = true;
         token = await GetFromLocalStorage("token");
 
+
         if (token != null) {
             var response = await meRequest();
             if (response.IsSuccessStatusCode)
@@ -91,4 +95,5 @@ else
         navManager.NavigateTo("/login");
         StateHasChanged();
     }
+
 }
