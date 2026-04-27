@@ -1,3 +1,4 @@
+using DnDPlatform.Models;
 using DnDPlatform.Models.DTOs.Characters;
 using DnDPlatform.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -45,7 +46,7 @@ public class CharactersController : AuthorizedControllerBase
         return Ok(await _characterService.GetCharacterAsync(CurrentUserId, id));
     }
 
-    // Endpoint for saving a new character sheet
+    // Endpoint for saving a characters sheet
     [HttpPut("{id:guid}/sheet")]
     public async Task<ActionResult<SheetVersionDto>> SaveSheet(Guid id, SaveSheetRequest request)
     {
@@ -53,13 +54,13 @@ public class CharactersController : AuthorizedControllerBase
         
         // validate whether the save sheet request contains values for the json schema defined in the template
         // e.g. if the template defined strength and it was required, then the charcater sheet save must have that field in there 
-        var validation = await _templateService.ValidateSheetAsync(character.TemplateId, request.SheetData);
+        var validation = await _templateService.ValidateSheetAsync(character.TemplateId, request.sheetData);
         if (!validation.IsValid)
         {
             return UnprocessableEntity(validation.Errors);   
         }
 
-        var version = await _versionManager.SaveCurrentAsync(CurrentUserId, id, request.SheetData);
+        var version = await _versionManager.SaveCurrentAsync(CurrentUserId, id, request.sheetData);
 
         return Ok(version);
     }

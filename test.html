@@ -295,6 +295,7 @@ async function saveSheet() {
   let data;
   try { data = JSON.parse(v('cs-data')); }
   catch { showResponse(400, { error: 'Invalid JSON in sheet data' }, 0); return; }
+  data = JSON.stringify(data);
   await req('PUT', '/characters/' + v('cs-id') + '/sheet', { sheetData: data });
 }
 

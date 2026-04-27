@@ -9,6 +9,7 @@
 @using DnDPlatform.Frontend.Models.FormModels
 @using DnDPlatform.Frontend.Models.ResponseModels
 @using DnDPlatform.Frontend.Services
+@using Newtonsoft.Json.Schema
 
 <PageTitle>Templates</PageTitle>
 
@@ -106,15 +107,15 @@
             <div class="modal-content">
                 <div class="modal-header bg-dark">
                     <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Character Details</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => CloseDialog(ref _dialogOpenDetail)"></button>
                 </div>
                 <div class="modal-body">
                     <p>
-                        <strong>Template Id:</strong> @_detailTemplate.id
+                        <strong>Template Id:</strong> @_detailTemplate.jsonSchema
                     </p>
                 </div>
                 <div class="modal-footer bg-dark">
-                    <button type="button" class="btn btn-secondary text-white" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)">Close</button>
+                    <button type="button" class="btn btn-secondary text-white" @onclick="() => CloseDialog(ref _dialogOpenDetail)">Close</button>
                 </div>
             </div>
         </div>
