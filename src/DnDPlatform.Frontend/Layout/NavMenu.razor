@@ -1,4 +1,4 @@
-﻿<div style="position: sticky; height: 100vh; display: flex; flex-direction: column;">
+﻿<div class="clickable-hand" style="position: sticky; height: 100vh; display: flex; flex-direction: column;">
 
     <div class="nav-top-row navbar navbar-dark">
         <div class="container-fluid">
@@ -40,6 +40,15 @@
                     @if (!IconMenuActive)
                     {
                         <span class="SignLabel">Characters</span>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3 characters">
+                <NavLink class="nav-link sign-link" href="versions">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span>                 
+                    @if (!IconMenuActive)
+                    {
+                        <span class="SignLabel">Sheet Versions</span>
                     }
                 </NavLink>
             </div>
@@ -92,3 +101,8 @@
     }
 }
 
+<style>
+    .nav-link:hover{
+        cursor: url('/Photos/cursor_gray.png'), auto;
+    }
+</style>

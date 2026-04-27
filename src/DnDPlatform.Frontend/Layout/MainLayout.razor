@@ -14,13 +14,13 @@
 }
 else
 {
-    <div class="page">
+    <div class="page clickable-hand">
 
-        <div class="sidebar" style="@IconMenuCssClass">
+        <div class="sidebar clickable-hand" style="@IconMenuCssClass">
             <NavMenu ShowIconMenu="ToggleIconMenu" />
         </div>
 
-        <main>
+        <main class="clickable-hand">
             @if(!LoginSingletonService.LoggedIn) {
                 <div class="top-row px-4">
                     <a href="/register">Register</a>
@@ -36,7 +36,8 @@ else
                     </button>
                 </div>
             }
-            <article class="content px-4">
+            <div class="m-5"></div>
+            <article class="content px-4 clickable-hand">
                 @Body
             </article>
         </main>
