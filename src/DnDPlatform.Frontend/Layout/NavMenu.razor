@@ -1,60 +1,72 @@
-﻿<div class="top-row navbar navbar-dark">
-    <div class="container-fluid">
-        <span class="bi bi-monitor" style="color:white;" aria-hidden="true"></span>
-        @if (!@IconMenuActive)
-        {
-            <img src="/Photos/tavernrpg.png" class="LOGO" alt="The RPG Tavern Logo" />
-        }
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+﻿<div style="position: sticky; height: 100vh; display: flex; flex-direction: column;">
+
+    <div class="nav-top-row navbar navbar-dark">
+        <div class="container-fluid">
+            <span class="bi bi-monitor" style="color:white;" aria-hidden="true"></span>
+            @if (!@IconMenuActive)
+            {
+                <img src="/Photos/tavernrpg.png" class="LOGO" alt="The RPG Tavern Logo" />
+            }
+            <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
     </div>
-</div>
 
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
-    <nav class="nav flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> 
-                @if (!IconMenuActive)
-                {
-                    <label>Home</label>
-                }
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="templates">
-                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span>                 
-                @if (!IconMenuActive)
-                {
-                    <label>Template</label>
-                }
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="characters">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span>                 
-                @if (!IconMenuActive)
-                {
-                    <label>Characters</label>
-                }
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
-<div class="bottom-row">
-    <div class="icon-menu-arrow">
-        @if (!@IconMenuActive)
-        {
-            <span class="bi bi-arrow-left" style="color: white;" @onclick="ToggleIconMenu"></span>
-        }
-        else
-        {
-            <span class="bi bi-arrow-right" style="color: white;" @onclick="ToggleIconMenu"></span>
-        }
+    <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+        <nav class="nav flex-column">
+            <div class="nav-item px-3 home">
+                <NavLink class="nav-link sign-link" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> 
+                    @if (!IconMenuActive)
+                    {
+                        <span class="sign-text">Home</span>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3 templates">
+                <NavLink class="nav-link sign-link" href="templates">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span>                 
+                    @if (!IconMenuActive)
+                    {
+                        <span class="sign-text">Template</span>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3 characters">
+                <NavLink class="nav-link sign-link" href="characters">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span>                 
+                    @if (!IconMenuActive)
+                    {
+                        <span class="SignLabel">Characters</span>
+                    }
+                </NavLink>
+            </div>
+        </nav>
     </div>
+
+
+            @if (!@IconMenuActive)
+            {
+                <div class="bottom-row">
+                    <div class="icon-menu-arrow">
+                        <div @onclick="ToggleIconMenu" @onclick:stopPropagation="true">
+                            <img src="/Photos/NavArrow.png" alt="collapse nav arrow" style="transform: scaleX(-1); height: 25%; width: 25%; padding-bottom: 10%;"/>
+                        </div>
+                    </div>
+                </div> 
+            }
+            else
+            {
+                <div class="bottom-row" style="padding-left: 10%;">
+                    <div class="icon-menu-arrow">
+                        <div @onclick="ToggleIconMenu" @onclick:stopPropagation="true">
+                            <img src="/Photos/NavArrow.png" alt="open nav arrow" style=" height: 64px; width: 64px; padding-bottom: 10%;"/>
+                        </div>
+                    </div>
+                </div>
+            }
 </div>
 
 @code {

@@ -3,7 +3,7 @@
 
 }
 
-.top-row {
+.nav-top-row {
     height: fit-content;
     align-items: center;
 }
@@ -25,6 +25,10 @@
     justify-content: space-between;
 }
 
+::deep .nav-scrollable, .navbar {
+    position: relative;
+}
+
 .bottom-row {
     position: absolute;
     bottom: 0;
@@ -32,6 +36,8 @@
     text-align: right;
     width: 100%;
     padding-right: 28px;
+    display: block;
+    z-index: 10;
 }
 
 .icon-menu-arrow {
@@ -50,6 +56,13 @@
     top: -2px;
 }
 
+.sign-link {
+    background-image: url('/Photos/sign.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
 .nav-item {
     font-size: 0.9rem;
     padding-bottom: 0.5rem;
@@ -64,22 +77,39 @@
     }
 
     .nav-item ::deep a {
-        color: #d7d7d7;
-        border-radius: 4px;
-        height: 3rem;
+        color: #fff;
+        border-radius: 6px;
         display: flex;
         align-items: center;
-        line-height: 3rem;
+        min-height: 7rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat;
+        position: relative;
+        overflow: hidden;
     }
 
-.nav-item ::deep a.active {
-    background-color: rgba(255,255,255,0.25);
-    color: white;
+.nav-item ::deep a::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.nav-item ::deep a > * {
+    position: relative;
+    z-index: 1;
+}
+
+.home, .templates, .characters, ::deep a {
+    background-image: url('/Photos/sign.png');
 }
 
 .nav-item ::deep a:hover {
-    background-color: rgba(255,255,255,0.1);
-    color: white;
+    background-image: url('/Photos/signHOver.png');
 }
 
 @media (min-width: 641px) {
@@ -88,7 +118,6 @@
     }
 
     .collapse {
-        /* Never collapse the sidebar for wide screens */
         display: block;
     }
 }
@@ -98,5 +127,4 @@
         display: block;
     }
 }
-
 

@@ -11,8 +11,9 @@ main {
 .sidebar {
     background-image: url('/Photos/navbarbackground.png');
     background-size: 100% 100%;
-    position: relative;
+    position: sticky;
     min-height: 100vh;
+    height: 100%;   
     z-index: 100;
 }
 
@@ -58,7 +59,7 @@ main {
     .sidebar {
         width: 250px;
         height: 100vh;
-        position: relative;
+        position: sticky;
         top: 0;
     }
 
@@ -80,7 +81,7 @@ main {
         top: 0;
         width: 100%;
         height: auto;
-        transform: translateY(-5%);
+        transform: translateY(-15%);
         pointer-events: none;
         z-index: 0; 
     }
