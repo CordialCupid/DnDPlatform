@@ -61,12 +61,16 @@
         </div>
     </div>
 
+    <div class="input-group mt-2">
+        <input  @bind-value="@tempFilter" type="text" class="form-control" placeholder="Enter Template System To Filter By e.g. dnd5e..." aria-label="Character Id Input" aria-describedby="character id input">
+    </div>
+
     <div class="row mb-4">
         <div class="col text-center">
             <h2 class="mb-3">Templates</h2>
         </div>
     </div>
-    @if(templates.Count() < 1) {
+    @if(filterTemplates.Count() < 1) {
         <div class="row">
             <div class="col text-center py-5">
                 <div class="text-muted">
@@ -78,7 +82,7 @@
     }
     else {
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @foreach (TemplateResponseModel temp in templates) {
+            @foreach (TemplateResponseModel temp in filterTemplates) {
                 <div class="col">
                     <div class="card h-100 shadow-sm">
                         <div class="card-header bg-dark">
@@ -125,12 +129,14 @@
 @code {
     private TemplateModel template {get;set;} = new();
     private TemplateResponseModel _detailTemplate {get;set;} = new();
-    private List<TemplateResponseModel> templates {get;set;} = new List<TemplateResponseModel>();
+    private List<TemplateResponseModel> templates {get;set;} = new();
+    private List<TemplateResponseModel> filterTemplates => templates.Where(t => t.system.Substring(0).Contains(tempFilter)).ToList();
     private string _result = "";
     public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
     private string? token = "";
     private bool _dialogOpenDetail; 
     private string _dialogCssForDetail => _dialogOpenDetail ? "show" : "hide"; 
+    private string tempFilter = "";
 
     private async Task SubmitButton() {
         var CreateTemplateResponse = await createTemplateRequest();

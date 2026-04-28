@@ -4,8 +4,6 @@ using DnDPlatform.Models.DTOs.Templates;
 using DnDPlatform.Repositories.Interfaces;
 using DnDPlatform.Services.Interfaces;
 using System.Text.Json;
-using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Linq;
 using System.Reflection.Metadata;
 
 
@@ -124,7 +122,6 @@ public class TemplateService : ITemplateService
         return result;
     }
 
-
     private static TemplateDto MapToDto(Template t)
     {
         return new()
@@ -138,11 +135,5 @@ public class TemplateService : ITemplateService
             OwnerId = t.OwnerId,
             CreatedAt = t.CreatedAt
         };
-    }
-
-    enum Types
-    {
-        Number,
-        Text
     }
 }

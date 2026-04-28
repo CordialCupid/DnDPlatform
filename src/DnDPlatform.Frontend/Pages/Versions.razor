@@ -79,13 +79,32 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-dark">
-                <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Sheet Details</h1>
+                <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Sheet Details - Enter JSON below to update your skills (please match exactly)</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => CloseDialog(ref _dialogOpenDetail)"></button>
             </div>
             <div class="modal-body">
                 <p>
                     <strong>Sheet Id:</strong> @_detailSheet.id
                 </p>
+                @if(detailCharacter.currentSheet != null)
+                {
+                    <p>
+                        @detailCharacter.currentSheet.jsonBlob
+                    </p>
+                }
+
+                <EditForm Model="@sheet" OnValidSubmit="@SubmitSheetSave">
+                    <DataAnnotationsValidator/>
+                    <div class="mb-3">
+                        <label for="Fields" class="form-label">Fields</label>
+                        <textarea type="text" step="0.1" class="form-control" id="Fields" name="Fields"
+                            placeholder="Enter fields (must be in JSON format)" @bind="sheet.sheetData"/>
+                        <ValidationMessage For="@(() => sheet.sheetData)" />
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button type="submit" class="btn btn-dark">Update Sheet</button>
+                    </div>
+                </EditForm>
             </div>
             <div class="modal-footer bg-dark">
                 <button type="button" class="btn btn-secondary text-white" @onclick="() => CloseDialog(ref _dialogOpenDetail)">Close</button>
@@ -117,7 +136,9 @@
 
 @code {
     private TemplateModel template {get;set;} = new();
+    private SheetFormModel sheet = new();
     private VersionResponseModel _detailSheet {get;set;} = new();
+    private CharacterResponseModel detailCharacter = new();
     private List<VersionResponseModel> versions {get;set;} = new List<VersionResponseModel>();
     public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
     private string? token = "";
@@ -132,12 +153,22 @@
     private async Task SubmitButton() {
         if (!String.IsNullOrEmpty(enteredId))
         {
+
             var response = await GetVersionHistory(enteredId);
             if (response.IsSuccessStatusCode)
             {
                 var stream = await response.Content.ReadAsStringAsync();
                 versions = JsonSerializer.Deserialize<List<VersionResponseModel>>(stream) ?? new();
             }
+        }
+    }
+
+    private async Task SubmitSheetSave()
+    {
+        var response = await SaveSheet();
+        if (response.IsSuccessStatusCode)
+        {
+            await CloseDialog(ref _dialogOpenDetail);
         }
     }
 
@@ -156,7 +187,13 @@
     private async Task OpenSheetDetails(string? sheetId)
     {
         _detailSheet = versions.FirstOrDefault(t => t.id.ToString() == sheetId) ?? new();
-        await OpenDialog(ref _dialogOpenDetail);
+        var response = await GetSingularCharacter(enteredId);
+        if (response.IsSuccessStatusCode)
+        {
+            var charDetails = await response.Content.ReadAsStringAsync();
+            detailCharacter = JsonSerializer.Deserialize<CharacterResponseModel>(charDetails) ?? new();
+            await OpenDialog(ref _dialogOpenDetail);
+        }
     }
 
     private async Task<HttpResponseMessage> GetVersionHistory(string id)
@@ -171,6 +208,26 @@
     private async Task<HttpResponseMessage> AddSnapshot()
     {
         var request = new HttpRequestMessage(HttpMethod.Post, $"/api/characters/{enteredId}/snapshot");
+        request.Headers.Add("Authorization", $"Bearer {token}");
+        var response = await Client.SendAsync(request);
+
+        return response;
+    }
+
+    private async Task<HttpResponseMessage> GetSingularCharacter(string id)
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, $"/api/characters/{id}");
+        request.Headers.Add("Authorization", $"Bearer {token}");
+        var response = await Client.SendAsync(request);
+
+        return response;
+    }
+
+    private async Task<HttpResponseMessage> SaveSheet()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Put, $"/api/characters/{enteredId}/sheet");
+        var postBody = new {sheetData = sheet.sheetData};
+        request.Content = new StringContent(JsonSerializer.Serialize(postBody), Encoding.UTF8, "application/json");
         request.Headers.Add("Authorization", $"Bearer {token}");
         var response = await Client.SendAsync(request);
 
