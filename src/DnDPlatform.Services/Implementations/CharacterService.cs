@@ -1,7 +1,6 @@
 using DnDPlatform.Models.DTOs.Characters;
 using DnDPlatform.Models.Enums;
 using DnDPlatform.Repositories.Interfaces;
-using DnDPlatform.Services.Algorithms;
 using DnDPlatform.Services.Events;
 using DnDPlatform.Services.Interfaces;
 using DnDPlatform.Models.Domain;
@@ -53,16 +52,11 @@ public class CharacterService : ICharacterService
 
         var sheet = await _sheetRepo.GetCurrentAsync(characterId);
 
-        if (sheet is not null)
+        if (sheet == null)
         {
-            var template = await _templateRepo.GetByIdAsync(character.TemplateId);
-            if (template is not null)
-            {
-                sheet.JsonBlob = CalculatedFieldEvaluator.Evaluate(template.JsonSchema, sheet.JsonBlob);            
-            }
+            throw new NullReferenceException("Sheet is null");
         }
-
-        return MapToDto(character, sheet);
+        return MapToDto(character, sheet);  
     }
 
     public async Task DeleteCharacterAsync(Guid userId, Guid characterId)

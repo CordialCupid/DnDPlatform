@@ -10,6 +10,7 @@
 @using System.Text
 @using System.Net
 @using DnDPlatform.Frontend.Services
+@using System.Net.Cache
 
 <PageTitle>Characters</PageTitle>
 <div class="characterWHOLE">
@@ -123,48 +124,46 @@
                             <InputTextArea class="rounded bg-light" style="width: 100%; border: none" id="backStoryInput" @bind-Value="model.BackStory" placeholder="Enter backstory..."></InputTextArea>
                             <ValidationMessage For="@(() => model.BackStory)"/>
                         
-                        </EditForm>
-                    </div>
-                    <div class="modal-footer bg-dark">
-                        <button type="button" class="btn btn-secondary text-white" @onclick="() => this.CloseDialog(ref _dialogOpenCreate)">Close</button>
-                        <button type="submit" form="createCharForm" class="btn btn-primary text-white">Save changes</button>
-                    </div>
+                    </EditForm>
+                </div>
+                <div class="modal-footer bg-dark">
+                    <button type="button" class="btn btn-secondary text-white" @onclick="() => CloseDialog(ref _dialogOpenCreate)">Close</button>
+                    <button type="submit" form="createCharForm" class="btn btn-dark text-white">Save changes</button>
                 </div>
             </div>
         </div>
 
-        @*Modal for character details*@
-        <div class="modal fade @_dialogCssForDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header bg-dark">
-                        <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Character Details</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p class="card-text">
-                            <strong>BackStory:</strong> @detailCharacter.backstory<br>
-                        </p>
-                        <p class="card-text">
-                            <strong>Created At:</strong> @detailCharacter.createdAt<br>
-                        </p>
-                        @if(detailCharacter.currentSheet != null)
-                        {
-                        <p class="card-text">
-                            <strong>Sheet Label:</strong> @detailCharacter.currentSheet.label<br>
-                        </p>
-                        <p class="card-text">
-                            <strong>Sheet Id:</strong> @detailCharacter.currentSheet.id<br>
-                        </p>
-                        <p class="card-text">
-                            <strong>Sheet Version:</strong> @detailCharacter.currentSheet.versionNumber<br>
-                        </p>
-                        }
-                    </div>
-                    <div class="modal-footer bg-dark">
-                        <button type="button" class="btn btn-secondary text-white" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)">Close</button>
-                        <button type="button" class="btn btn-danger" @onclick="(async) => DeleteCharacter(detailCharacter.id.ToString())">Delete Character</button>
-                    </div>
+    @*Modal for character details*@
+    <div class="modal fade @_dialogCssForDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-dark">
+                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Character Details</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => CloseDialog(ref _dialogOpenDetail)"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="card-text">
+                        <strong>BackStory:</strong> @detailCharacter.backstory<br>
+                    </p>
+                    <p class="card-text">
+                        <strong>Created At:</strong> @detailCharacter.createdAt<br>
+                    </p>
+                    @if(detailCharacter.currentSheet != null)
+                    {
+                    <p class="card-text">
+                        <strong>Current Sheet Label:</strong> @detailCharacter.currentSheet.label<br>
+                    </p>
+                    <p class="card-text">
+                        <strong>Current Sheet Id:</strong> @detailCharacter.currentSheet.id<br>
+                    </p>
+                    <p class="card-text">
+                        <strong>Current Sheet Version:</strong> @detailCharacter.currentSheet.versionNumber<br>
+                    </p>
+                    }
+                </div>
+                <div class="modal-footer bg-dark">
+                    <button type="button" class="btn btn-secondary text-white" @onclick="() => CloseDialog(ref _dialogOpenDetail)">Close</button>
+                    <button type="button" class="btn btn-danger" @onclick="(async) => DeleteCharacter(detailCharacter.id.ToString())">Delete Character</button>
                 </div>
             </div>
         </div>
@@ -277,13 +276,6 @@
 
         return response;
     }
-
-    @* private async Task<HttpResponseMessage> SaveSnapshot()
-    {
-        var request = new HttpRequestMessage(HttpMethod.Post, "/characters/{id}/snapshot");
-        var postBody = new {};
-        
-    } *@
 }
 
 <style>
@@ -293,6 +285,11 @@
 
     .hide {
         display: none;
+    }
+
+    .icon-menu-arrow {
+        text-align: right;
+        cursor: pointer;
     }
 </style>
 

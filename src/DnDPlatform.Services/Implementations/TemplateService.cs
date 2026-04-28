@@ -2,9 +2,10 @@ using DnDPlatform.Models;
 using DnDPlatform.Models.Domain;
 using DnDPlatform.Models.DTOs.Templates;
 using DnDPlatform.Repositories.Interfaces;
-using DnDPlatform.Services.Algorithms;
 using DnDPlatform.Services.Interfaces;
 using System.Text.Json;
+using System.Reflection.Metadata;
+
 
 namespace DnDPlatform.Services.Implementations;
 
@@ -68,16 +69,57 @@ public class TemplateService : ITemplateService
         return MapToDto(saved);
     }
 
+    // method to compaure the schema defined in the template and the modifications passed in by the user
     public async Task<SheetValidationResult> ValidateSheetAsync(Guid templateId, string sheetBlob)
     {
-        var template = await _repo.GetByIdAsync(templateId); 
+        int num;
+        bool correctType;
+        var template = await _repo.GetByIdAsync(templateId);
+        SheetValidationResult result = new();
 
         if(template == null)
         {
-            throw new Exception($"Template {templateId} not foun");
+            throw new Exception($"Template {templateId} not found");
         }
 
-        return SheetValidationEngine.Validate(template, sheetBlob);
+        List<SchemaDefinition> fields = JsonSerializer.Deserialize<List<SchemaDefinition>>(template.JsonSchema) ?? new();
+
+        Dictionary<string, object> sheetFields = JsonSerializer.Deserialize<Dictionary<string,object>>(sheetBlob) ?? new();
+
+        foreach (SchemaDefinition field in fields)
+        {
+            if (field.required && !sheetFields.ContainsKey(field.name))
+            {
+                ValidationError err = new ValidationError
+                {
+                    Field = field.name,
+                    Message = $"{field.name} not found in schema."
+                };
+                result.Errors.Add(err);
+            }
+            else if (sheetFields.ContainsKey(field.name))
+            {
+                var holder = sheetFields[field.name].ToString();
+
+                if (field.type == "Number")
+                {
+                    correctType = int.TryParse(holder, out num);
+                    if (correctType == false)
+                    {
+                        ValidationError err = new ValidationError
+                        {
+                            Field = field.name,
+                            Message = $"{field.name} is of wrong type or indiscernable."
+                        };
+                        result.Errors.Add(err);
+                        break;
+                    }
+                    continue;
+                }
+            }
+        }
+
+        return result;
     }
 
     private static TemplateDto MapToDto(Template t)

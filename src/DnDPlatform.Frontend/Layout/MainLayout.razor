@@ -7,6 +7,9 @@
 @using DnDPlatform.Frontend.Models.ResponseModels;
 @using DnDPlatform.Frontend.Pages
 @using DnDPlatform.Frontend.Services
+@using Newtonsoft.Json.Schema
+@using Newtonsoft.Json.Linq
+
 
 @if(isLoading)
 {
@@ -14,13 +17,13 @@
 }
 else
 {
-    <div class="page">
+    <div class="page clickable-hand">
 
-        <div class="sidebar" style="@IconMenuCssClass">
+        <div class="sidebar clickable-hand" style="@IconMenuCssClass">
             <NavMenu ShowIconMenu="ToggleIconMenu" />
         </div>
 
-        <main>
+        <main class="clickable-hand">
             @if(!LoginSingletonService.LoggedIn) {
                 <div class="top-row px-4">
                     <a href="/register" class="LoginRegisterButton" style="z-index: 1;">Register</a>
@@ -35,7 +38,8 @@ else
                     <button class="logout-button" type="button" @onclick="Logout" aria-label="Logout">Logout</button>
                 </div>
             }
-            <article class="content px-4">
+            <div class="m-5"></div>
+            <article class="content px-4 clickable-hand">
                 @Body
             </article>
         </main>
@@ -60,6 +64,7 @@ else
     {
         isLoading = true;
         token = await GetFromLocalStorage("token");
+
 
         if (token != null) {
             var response = await meRequest();
@@ -90,4 +95,5 @@ else
         navManager.NavigateTo("/login");
         StateHasChanged();
     }
+
 }

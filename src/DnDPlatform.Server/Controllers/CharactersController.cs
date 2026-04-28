@@ -1,3 +1,4 @@
+using DnDPlatform.Models;
 using DnDPlatform.Models.DTOs.Characters;
 using DnDPlatform.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -34,129 +35,64 @@ public class CharactersController : AuthorizedControllerBase
     [HttpPost]
     public async Task<ActionResult<CharacterDto>> Create(CreateCharacterRequest request)
     {
-        try
-        {
-            var character = await _creationService.CreateCharacterAsync(CurrentUserId, request);
-            return CreatedAtAction(nameof(GetById), new { id = character.Id }, character);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            return NotFound(new { message = ex.Message });
-        }
+        var character = await _creationService.CreateCharacterAsync(CurrentUserId, request);
+        return CreatedAtAction(nameof(GetById), new { id = character.Id }, character);
     }
 
     // GET endpoint for retrieving a character by a specific ID
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<CharacterDto>> GetById(Guid id)
     {
-        try
-        {
-            return Ok(await _characterService.GetCharacterAsync(CurrentUserId, id));
-        }
-        catch (KeyNotFoundException ex) 
-        { 
-            return NotFound(new { message = ex.Message }); 
-        }
-        catch (UnauthorizedAccessException) 
-        { 
-            return Forbid(); 
-        }
+        return Ok(await _characterService.GetCharacterAsync(CurrentUserId, id));
     }
 
-    // Endpoint for saving a new character sheet
+    // Endpoint for saving a characters sheet
     [HttpPut("{id:guid}/sheet")]
     public async Task<ActionResult<SheetVersionDto>> SaveSheet(Guid id, SaveSheetRequest request)
     {
-        try
+        var character = await _characterService.GetCharacterAsync(CurrentUserId, id);
+        
+        // validate whether the save sheet request contains values for the json schema defined in the template
+        // e.g. if the template defined strength and it was required, then the charcater sheet save must have that field in there 
+        var validation = await _templateService.ValidateSheetAsync(character.TemplateId, request.sheetData);
+        if (!validation.IsValid)
         {
-            var character = await _characterService.GetCharacterAsync(CurrentUserId, id);
-            
-            // validate whether the save sheet request contains values for the json schema defined in the template
-            // e.g. if the template defined strength and it was required, then the charcater sheet save must have that field in there 
-            var validation = await _templateService.ValidateSheetAsync(character.TemplateId, request.SheetData);
-            if (!validation.IsValid)
-            {
-                return UnprocessableEntity(validation.Errors);   
-            }
+            return UnprocessableEntity(validation.Errors);   
+        }
 
-            var version = await _versionManager.SaveCurrentAsync(CurrentUserId, id, request.SheetData);
+        var version = await _versionManager.SaveCurrentAsync(CurrentUserId, id, request.sheetData);
 
-            return Ok(version);
-        }
-        catch (KeyNotFoundException ex) 
-        { 
-            return NotFound(new { message = ex.Message });
-        }
-        catch (UnauthorizedAccessException)
-        { 
-            return Forbid(); 
-        }
+        return Ok(version);
     }
 
     // Endpoint for creating a new snapshot of a character sheet
     [HttpPost("{id:guid}/snapshot")]
     public async Task<ActionResult<SheetVersionDto>> CreateSnapshot(Guid id, CreateSnapshotRequest request)
     {
-        try
-        {
-            var character = await _characterService.GetCharacterAsync(CurrentUserId, id);
-            var current = character.CurrentSheet;
-            if (current == null)
-            {
-                throw new InvalidOperationException("No sheet data to snapshot.");
-            }
 
-            var snapshot = await _versionManager.CreateSnapshotAsync(CurrentUserId, id, current.JsonBlob, request.Label);
-            return Ok(snapshot);
+        var character = await _characterService.GetCharacterAsync(CurrentUserId, id);
+        var current = character.CurrentSheet;
+        if (current == null)
+        {
+            throw new InvalidOperationException("No sheet data to snapshot.");
         }
-        catch (KeyNotFoundException ex) 
-        { 
-            return NotFound(new { message = ex.Message }); 
-        }
-        catch (UnauthorizedAccessException) 
-        { 
-            return Forbid(); 
-        }
-        catch (InvalidOperationException ex) 
-        { 
-            return BadRequest(new { message = ex.Message }); 
-        }
+
+        var snapshot = await _versionManager.CreateSnapshotAsync(CurrentUserId, id, current.JsonBlob, request.Label);
+        return Ok(snapshot);
     }
 
     // Endpoint for getting the versions of a character
     [HttpGet("{id:guid}/versions")]
     public async Task<ActionResult<IEnumerable<VersionSummaryDto>>> GetVersions(Guid id)
     {
-        try
-        {
-            return Ok(await _versionManager.GetVersionHistoryAsync(CurrentUserId, id));
-        }
-        catch (KeyNotFoundException ex) 
-        { 
-            return NotFound(new { message = ex.Message }); 
-        }
-        catch (UnauthorizedAccessException) 
-        { 
-            return Forbid(); 
-        }
+        return Ok(await _versionManager.GetVersionHistoryAsync(CurrentUserId, id));
     }
 
     // Delete character endpoint
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Delete(Guid id)
     {
-        try
-        { 
-            await _characterService.DeleteCharacterAsync(CurrentUserId, id);
-            return NoContent();
-        }
-        catch (KeyNotFoundException ex) 
-        { 
-            return NotFound(new { message = ex.Message }); 
-        }
-        catch (UnauthorizedAccessException) 
-        { 
-            return Forbid(); 
-        }
+        await _characterService.DeleteCharacterAsync(CurrentUserId, id);
+        return NoContent();
     }
 }

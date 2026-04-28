@@ -5,5 +5,5 @@ namespace DnDPlatform.Models.DTOs.Characters;
 public class SaveSheetRequest
 {
     [Required]
-    public string SheetData { get; set; } = "{}";
+    public string sheetData { get; set; } = "{}";
 }

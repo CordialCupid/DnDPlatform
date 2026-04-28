@@ -9,6 +9,7 @@
 @using DnDPlatform.Frontend.Models.FormModels
 @using DnDPlatform.Frontend.Models.ResponseModels
 @using DnDPlatform.Frontend.Services
+@using Newtonsoft.Json.Schema
 
 <PageTitle>Templates</PageTitle>
 <div class="templateWHOLE">
@@ -109,11 +110,11 @@
             <div class="modal-content">
                 <div class="modal-header bg-dark">
                     <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Character Details</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => CloseDialog(ref _dialogOpenDetail)"></button>
                 </div>
                 <div class="modal-body">
                     <p>
-                        <strong>Template Id:</strong> @_detailTemplate.id
+                        <strong>Template Id:</strong> @_detailTemplate.jsonSchema
                     </p>
                 </div>
                 <div class="modal-footer bg-dark">
@@ -129,13 +130,15 @@
 @code {
     private TemplateModel template {get;set;} = new();
     private TemplateResponseModel _detailTemplate {get;set;} = new();
-    private List<TemplateResponseModel> templates {get;set;} = new List<TemplateResponseModel>();
+    private List<TemplateResponseModel> templates {get;set;} = new();
+    private List<TemplateResponseModel> filterTemplates => templates.Where(t => t.system.Substring(0).Contains(tempFilter)).ToList();
     private string _result = "";
     public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
     private string? token = "";
     private bool _dialogOpenDetail; 
     private string _dialogCssForDetail => _dialogOpenDetail ? "show" : "hide"; 
-    private JsonDocument? templateSchema;
+    private string tempFilter = "";
+
     private async Task SubmitButton() {
         var CreateTemplateResponse = await createTemplateRequest();
         if (CreateTemplateResponse.IsSuccessStatusCode) {
