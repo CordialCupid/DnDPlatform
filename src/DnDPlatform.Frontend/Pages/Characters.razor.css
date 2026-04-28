@@ -1,4 +1,4 @@
-﻿.templateWHOLE {
+﻿.characterWHOLE {
     background-image: url('/Photos/template character background.png');
     background-size: cover;
     align-content: center;
@@ -8,6 +8,27 @@
     height: 100%;
     width: 100%;
     position: relative;
+}
+
+
+.sign-wrapper {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.sign-img {
+    width: 700px;
+    display: block;
+}
+
+.sign-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    color: #ffd140;
 }
 
 .bo-text-color {
@@ -45,11 +66,13 @@
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    color: white;
 }
 
-.card-footer, .modal-footer{
+.card-footer, .modal-footer {
     background-image: url(/Photos/footerCharTempBG.png);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    color: white;
 }
