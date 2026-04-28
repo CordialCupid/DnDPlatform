@@ -123,7 +123,7 @@
                 </div>
                 <div class="modal-footer bg-dark">
                     <button type="button" class="btn btn-secondary text-white" @onclick="() => CloseDialog(ref _dialogOpenCreate)">Close</button>
-                    <button type="submit" form="createCharForm" class="btn btn-primary text-white">Save changes</button>
+                    <button type="submit" form="createCharForm" class="btn btn-dark text-white">Save changes</button>
                 </div>
             </div>
         </div>
@@ -147,10 +147,10 @@
                     @if(detailCharacter.currentSheet != null)
                     {
                     <p class="card-text">
-                        <strong>Sheet Label:</strong> @detailCharacter.currentSheet.label<br>
+                        <strong>Current Sheet Label:</strong> @detailCharacter.currentSheet.label<br>
                     </p>
                     <p class="card-text">
-                        <strong>Sheet Id:</strong> @detailCharacter.currentSheet.id<br>
+                        <strong>Current Sheet Id:</strong> @detailCharacter.currentSheet.id<br>
                     </p>
                     <p class="card-text">
                         <strong>Current Sheet Version:</strong> @detailCharacter.currentSheet.versionNumber<br>
