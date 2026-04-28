@@ -18,7 +18,13 @@
     <div class="featured-card-name">@lastCharacter.name</div>
     <div class="featured-card-details">
         <span>Level: @lastCharacter.level</span> &nbsp;|&nbsp;
-        <span>Class: @lastCharacter.Class</span>
+        @if(String.IsNullOrEmpty(lastCharacter.Class))
+        {
+            <span>Class: N/A</span>
+        }
+        else{
+            <span>Class: @lastCharacter.Class</span>
+        }
     </div>
     <div class="featured-card-footer"></div>
 </div>
