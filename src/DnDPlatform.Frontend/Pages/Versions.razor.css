@@ -1,4 +1,4 @@
-﻿.templateWHOLE {
+﻿.versionsWHOLE {
     background-image: url('/Photos/template character background.png');
     background-size: cover;
     align-content: center;
@@ -49,9 +49,9 @@
     vertical-align: middle;
 }
 
-    .submitButton:hover {
-        background-image: url('/Photos/signHOver.png');
-    }
+.submitButton:hover {
+    background-image: url('/Photos/signHOver.png');
+}
 
 .card-header, .modal-header {
     background-image: url(/Photos/headerCharTempBG.png);
@@ -60,7 +60,7 @@
     background-repeat: no-repeat;
 }
 
-.card-footer, .modal-footer{
+.card-footer, .modal-footer {
     background-image: url(/Photos/footerCharTempBG.png);
     background-position: center;
     background-size: cover;
