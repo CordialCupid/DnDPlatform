@@ -27,3 +27,55 @@
     object-fit: cover;
     z-index: 2;
 }
+.featured-card {
+    position: absolute;
+    top: 40%;
+    left: 40%;
+    transform: translateX(-50%);
+    z-index: 10;
+    width: 350px;
+    background-image: url(/Photos/bodyCharTempBG.png);
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    border: 3px solid #7f7f7f;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    color: #ffd140;
+}
+
+.featured-card-header {
+    background-image: url(/Photos/headerCharTempBG.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 4px 4px 0 0;
+    padding: 10px;
+    margin: -20px -20px 15px -20px; 
+    color: #ffd140;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.featured-card-name {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #ffd140;
+    margin-bottom: 8px;
+}
+
+.featured-card-details {
+    font-size: 0.95rem;
+    color: #ffd140;
+    opacity: 0.85;
+    line-height: 1.8;
+}
+
+.featured-card-footer {
+    background-image: url(/Photos/footerCharTempBG.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 0 0 4px 4px;
+    padding: 10px;
+    margin: 15px -20px -20px -20px;
+}

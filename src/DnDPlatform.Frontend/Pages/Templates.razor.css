@@ -1,0 +1,55 @@
+﻿.templateWHOLE {
+    background-image: url('/Photos/template character background.png');
+    background-size: cover;
+    align-content: center;
+    align-items: center;
+    background-repeat: repeat-y;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.bo-text-color {
+    color: #fed03e !important;
+}
+
+
+.card-body, .modal-body {
+    background-image: url(/Photos/bodyCharTempBG.png);
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    color: #ffd140;
+}
+
+
+.submitButton {
+    background-image: url(/Photos/sign.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    color: #ffd140;
+    padding: 5%;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+    .submitButton:hover {
+        background-image: url('/Photos/signHOver.png');
+    }
+
+.card-header, .modal-header {
+    background-image: url(/Photos/headerCharTempBG.png);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.card-footer, .modal-footer{
+    background-image: url(/Photos/footerCharTempBG.png);
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}

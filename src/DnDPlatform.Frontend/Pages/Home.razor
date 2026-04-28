@@ -1,30 +1,72 @@
 ﻿@page "/"
+@inject HttpClient Http
 @inject IJSRuntime jsRuntime
 @inject HttpClient Client
 @inject NavigationManager navManager
 @using System.Text.Json
 @using System.Text
 @using DnDPlatform.Frontend.Models.FormModels;
+@using DnDPlatform.Frontend.Models.ResponseModels
 @using DnDPlatform.Frontend.Services
 
 <PageTitle>Home</PageTitle>
 
+<div class="featured-card">
+    <div class="featured-card-header">
+        Last Character
+    </div>
+    <div class="featured-card-name">@lastCharacter.name</div>
+    <div class="featured-card-details">
+        <span>Level: @lastCharacter.level</span> &nbsp;|&nbsp;
+        <span>Class: @lastCharacter.Class</span>
+    </div>
+    <div class="featured-card-footer"></div>
+</div>
 <img src="/Photos/HomeBackground.png" class="background-image" alt="Tavern Background" />
-<img src="/Photos/bartender.png" class="bartenderImage" alt="Bartender Image" />
+<img src="/Photos/barkeep.gif" class="bartenderImage" alt="Bartender Image" />
 <img src="/Photos/CounterBackground.png" class="backgroundCounter" alt="Tavern Bartop" />
 
 
 @code {
     public async ValueTask<string?> GetFromLocalStorage(string key, string? defaultValue = null) => await jsRuntime.InvokeAsync<string>("localStorage.getItem", key) ?? defaultValue;
     private string token = "";
+
+    private CreateCharacterModel model = new();
+    private List<CharacterResponseModel> accountCharacters = new List<CharacterResponseModel>();
+    private CharacterResponseModel lastCharacter = new();
+    private bool isLoading = false;
+
+    
+
     protected override async Task OnInitializedAsync()
     {
-        if(LoginSingletonService.LoggedIn)
+        if (LoginSingletonService.LoggedIn)
         {
+            token = await GetFromLocalStorage("token") ?? "";
+            var request = new HttpRequestMessage(HttpMethod.Get, "/api/characters");
+            request.Headers.Add("Authorization", $"Bearer {token}");
+            var response = await Client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                var stream = await response.Content.ReadAsStringAsync();
+                var characters = JsonSerializer.Deserialize<List<CharacterResponseModel>>(stream);
+                lastCharacter = characters?.LastOrDefault();
+            }
             return;
         }
-        else{
+        else
+        {
             navManager.NavigateTo("/register");
         }
     }
+
+    private async Task<HttpResponseMessage> GetCharacters()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Get, "/api/characters");
+        request.Headers.Add("Authorization", $"Bearer {token}");
+        var response = await Http.SendAsync(request);
+
+        return response;
+    }
+
 }

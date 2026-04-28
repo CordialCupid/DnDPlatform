@@ -13,111 +13,116 @@
 @using System.Net.Cache
 
 <PageTitle>Characters</PageTitle>
-
-@if (!isLoading)
-{
-    <div class="container mt-4 clickable-hand">
-        <div class="row">
-            <div class="text-center">
-                <h1 class="fw-bold">Create A New Character:</h1>
-                <p class="fw-lighter">Click the button below to get started on making a new character...</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="d-flex justify-content-center">
-                <button disabled="@_dialogOpenCreate" class="btn btn-dark mx-auto" @onclick="() => OpenDialog(ref _dialogOpenCreate)">New Character</button> 
-            </div>
-        </div>
-        <div class="row mt-5">
-            <div class="mt-2">
-                <h3 class="text-decoration-underline">Characters:</h3>
-            </div>
-        </div>
-        <div class="mt-5">
-            @if(accountCharacters.Count() < 1)
-            {
-                <div class="row">
-                    <div class="col text-center py-5">
-                        <div class="text-muted">
-                            <i class="bi bi-inbox" style="font-size: 4rem;"></i>
-                            <h4 class="mt-3">No Characters Found...</h4>
+<div class="characterWHOLE">
+    @if (!isLoading)
+    {
+        <div class="container mt-4">
+            <div class="row">
+                <div class="d-flex justify-content-center">
+                    <div class="sign-wrapper">
+                        <img src="/Photos/sign.png" class="sign-img" alt="sign" />
+                        <div class="sign-content">
+                            <h1 class="fw-bold" style="margin-top: 10%; color: #ffd140;">Create A New Character:</h1>
+                            <p class="fw-lighter" style="color: #ffd140;">Click the button below to get started on making a new character...</p>
                         </div>
                     </div>
                 </div>
-            }
-            else
-            {
-                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                @foreach (CharacterResponseModel c in accountCharacters) {
-                    <div class="col">
-                        <div class="card h-100 shadow-sm ">
-                            <div class="card-header bg-dark text-white">
-                                <h5 class="card-title">@c.name</h5>
-                            </div>
-                            <div class="card-body"> 
-                                <p class="card-text">
-                                    <strong>Level:</strong> @c.level<br>
-                                </p>
-                                <p class="card-text">
-                                    <strong>Class:</strong> @c.Class<br>
-                                </p>
-                                <p class="card-text">
-                                    <strong>Id:</strong> @c.id<br>
-                                </p>
-                                <p class="card-text">
-                                    <strong>Template Name:</strong> @c.templateName<br>
-                                </p>
-                            </div>
-                            <div class="card-footer bg-dark text-white">
-                                <button type="button" class="btn btn-secondary rounded" style="border: none;" @onclick="(async) => OnDetailsClick(c.id.ToString())">Details</button>
+            </div>
+            <div class="row">
+                <div class="d-flex justify-content-center">
+                    <button disabled="@_dialogOpenCreate" class="btn btn-dark mx-auto" @onclick="() => OpenDialog(ref _dialogOpenCreate)">New Character</button> 
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="mt-2">
+                    <h3 class="text-decoration-underline" style="color: #ffd140;">Characters:</h3>
+                </div>
+            </div>
+            <div class="mt-5">
+                @if(accountCharacters.Count() < 1)
+                {
+                    <div class="row">
+                        <div class="col text-center py-5">
+                            <div class="text-muted">
+                                <i class="bi bi-inbox" style="font-size: 4rem;"></i>
+                                <h4 class="mt-3">No Characters Found...</h4>
                             </div>
                         </div>
                     </div>
-                }   
-            </div>
-            }
-        </div>
-    </div>
-
-
-    @*Modal for create character*@
-    <div class="modal fade @_dialogCssForCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header bg-dark">
-                    <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Create Character</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => CloseDialog(ref _dialogOpenCreate)"></button>
+                }
+                else
+                {
+                    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                    @foreach (CharacterResponseModel c in accountCharacters) {
+                        <div class="col">
+                            <div class="card h-100 shadow-sm ">
+                                <div class="card-header">
+                                    <h5 class="card-title">@c.name</h5>
+                                </div>
+                                <div class="card-body"> 
+                                    <p class="card-text">
+                                        <strong>Level:</strong> @c.level<br>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Class:</strong> @c.Class<br>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Id:</strong> @c.id<br>
+                                    </p>
+                                    <p class="card-text">
+                                        <strong>Template Name:</strong> @c.templateName<br>
+                                    </p>
+                                </div>
+                                <div class="card-footer">
+                                    <button type="button" class="submitButton" style="border: none;" @onclick="(async) => OnDetailsClick(c.id.ToString())">Details</button>
+                                </div>
+                            </div>
+                        </div>
+                    }   
                 </div>
-                <div class="modal-body">
-                    <EditForm Model="@model" OnValidSubmit="@Submission" FormName="createCharForm" id="createCharForm">
-                        <DataAnnotationsValidator/>
+                }
+            </div>
+        </div>
 
-                        <label for="nameInput">Character Name:</label><br />
-                        <InputText class="rounded bg-light" style="border: none" id="nameInput" @bind-Value="model.CharacterName" placeholder="Name..."/>
-                        <ValidationMessage For="@(() => model.CharacterName)"/>
 
-                        <br/> 
-                        <label for="classInput">Character Class:</label>
-                        <br/> 
-                        <InputText class="rounded bg-light" style="border: none" id="classInput" @bind-Value="model.Class" placeholder="Class..."></InputText>
-                        <ValidationMessage For="@(() => model.Class)" />
+        @*Modal for create character*@
+        <div class="modal fade @_dialogCssForCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-dark">
+                        <h1 class="modal-title fs-5 text-white" id="exampleModalLabel">Create Character</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="() => this.CloseDialog(ref _dialogOpenCreate)"></button>
+                    </div>
+                    <div class="modal-body">
+                        <EditForm Model="@model" OnValidSubmit="@Submission" FormName="createCharForm" id="createCharForm">
+                            <DataAnnotationsValidator/>
 
-                        <br/> 
-                        <label for="levelInput">Character Level:</label>
-                        <br/> 
-                        <InputNumber class="rounded bg-light" style="border: none" id="levelInput" @bind-Value="model.Level"></InputNumber>
-                        <ValidationMessage For="@(() => model.Level)"/>
+                            <label for="nameInput">Character Name:</label><br />
+                            <InputText class="rounded bg-light" style="border: none" id="nameInput" @bind-Value="model.CharacterName" placeholder="Name..."/>
+                            <ValidationMessage For="@(() => model.CharacterName)"/>
 
-                        <br />
-                        <label for="idInput">Template Id:</label><br />
-                        <InputText class="rounded bg-light" style="border: none" id="idInput" @bind-Value="model.TemplateId" placeholder="Template..."/>
-                        <ValidationMessage For="@(() => model.TemplateId)"/>
+                            <br/> 
+                            <label for="classInput">Character Class:</label>
+                            <br/> 
+                            <InputText class="rounded bg-light" style="border: none" id="classInput" @bind-Value="model.Class" placeholder="Class..."></InputText>
+                            <ValidationMessage For="@(() => model.Class)" />
 
-                        <br/> 
-                        <label for="backStoryInput">Character BackStory</label>
-                        <br/> 
-                        <InputTextArea class="rounded bg-light" style="width: 100%; border: none" id="backStoryInput" @bind-Value="model.BackStory" placeholder="Enter backstory..."></InputTextArea>
-                        <ValidationMessage For="@(() => model.BackStory)"/>
+                            <br/> 
+                            <label for="levelInput">Character Level:</label>
+                            <br/> 
+                            <InputNumber class="rounded bg-light" style="border: none" id="levelInput" @bind-Value="model.Level"></InputNumber>
+                            <ValidationMessage For="@(() => model.Level)"/>
+
+                            <br />
+                            <label for="idInput">Template Id:</label><br />
+                            <InputText class="rounded bg-light" style="border: none" id="idInput" @bind-Value="model.TemplateId" placeholder="Template..."/>
+                            <ValidationMessage For="@(() => model.TemplateId)"/>
+
+                            <br/> 
+                            <label for="backStoryInput">Character BackStory</label>
+                            <br/> 
+                            <InputTextArea class="rounded bg-light" style="width: 100%; border: none" id="backStoryInput" @bind-Value="model.BackStory" placeholder="Enter backstory..."></InputTextArea>
+                            <ValidationMessage For="@(() => model.BackStory)"/>
                         
                     </EditForm>
                 </div>
@@ -127,7 +132,6 @@
                 </div>
             </div>
         </div>
-    </div>
 
     @*Modal for character details*@
     <div class="modal fade @_dialogCssForDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -163,9 +167,9 @@
                 </div>
             </div>
         </div>
-    </div>
 
-}
+    }
+</div>
 @code {
     private CreateCharacterModel model = new();
 

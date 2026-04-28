@@ -1,0 +1,44 @@
+﻿.loginWHOLE {
+    background-image: url('/Photos/loginBackground.png');
+    background-size: cover;
+    align-content: center;
+    align-items: center;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.LoginBalancer{
+    display: flex;
+    align-items: center;
+}
+
+.container {
+    margin-left: 5%;
+    background-image: url('/Photos/SignIN_Artwork.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding: 2%;
+}
+
+.bo-text-color {
+    color: #fed03e !important;
+}
+
+.submitButton {
+    background-image: url(/Photos/sign.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    color: #ffd140;
+    padding: 5%;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+    .submitButton:hover{
+        background-image: url('/Photos/signHOver.png');
+    }
