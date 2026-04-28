@@ -11,97 +11,100 @@
 @using DnDPlatform.Frontend.Services
 
 <PageTitle>Templates</PageTitle>
-
-<div class="container mt-5">
-    <div class="row mb-4">
-        <div class="col">
-            <h1 class="display-4 text-primary ">Templates</h1>
-            <p class="lead text-muted">List your templates or create a new one</p>
+<div class="templateWHOLE">
+    <div class="container mt-5">
+        <div class="row mb-4">
+            <div class="col sign">
+                <h1 class="display-4 text-primary bo-text-color">Templates</h1>
+                <p style="color:white;">List your templates or create a new one</p>
+            </div>
         </div>
-    </div>
 
-    <div class="row mb-5">
-        <div class="col-lg-6 mx-auto">
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark">
-                    <h5 class="mb-0 text-white" id="form-title">Add New Template</h5>
-                </div>
-                <div class="card-body">
-                    <EditForm Model="@template" OnValidSubmit="@SubmitButton">
-                        <DataAnnotationsValidator/>
+        <div class="row mb-5">
+            <div class="col-lg-6 mx-auto">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark">
+                        <h5 class="mb-0 text-white" id="form-title">Add New Template</h5>
+                    </div>
+                    <div class="card-body">
+                        <EditForm Model="@template" OnValidSubmit="@SubmitButton">
+                            <DataAnnotationsValidator />
 
-                        <div class="mb-3">
-                            <label for="Name" class="form-label">Template Name</label>
-                            <InputText type="text" class="form-control" id="Name" name="Name"
-                                placeholder="Enter template name" @bind-Value="template.Name"/>
-                            <ValidationMessage For="@(() => template.Name)" />
-                        </div>
+                            <div class="mb-3">
+                                <label for="Name" class="form-label">Template Name</label>
+                                <InputText type="text" class="form-control" id="Name" name="Name"
+                                           placeholder="Enter template name" @bind-Value="template.Name" />
+                                <ValidationMessage For="@(() => template.Name)" />
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="System" class="form-label">System</label>
-                            <InputText type="text" step="0.1" class="form-control" name="System"
-                                placeholder="System (e.g. dnd5e)" @bind-Value="template.System"/>
-                            <ValidationMessage For="@(() => template.System)" />
-                        </div>
+                            <div class="mb-3">
+                                <label for="System" class="form-label">System</label>
+                                <InputText type="text" step="0.1" class="form-control" name="System"
+                                           placeholder="System (e.g. dnd5e)" @bind-Value="template.System" />
+                                <ValidationMessage For="@(() => template.System)" />
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="Fields" class="form-label">Fields</label>
-                            <textarea type="text" step="0.1" class="form-control" id="Fields" name="Fields"
-                                placeholder="Enter fields (must be in JSON format)" @bind="template.Fields"/>
-                            <ValidationMessage For="@(() => template.Fields)" />
-                        </div>
+                            <div class="mb-3">
+                                <label for="Fields" class="form-label">Fields</label>
+                                <textarea type="text" step="0.1" class="form-control" id="Fields" name="Fields"
+                                          placeholder="Enter fields (must be in JSON format)" @bind="template.Fields" />
+                                <ValidationMessage For="@(() => template.Fields)" />
+                            </div>
 
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                            <button type="submit" class="btn btn-primary">Save Template</button>
-                        </div>
-                    </EditForm>
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="submit" class="submitButton">Save Template</button>
+                            </div>
+                        </EditForm>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row mb-4">
-        <div class="col text-center">
-            <h2 class="mb-3">Templates</h2>
-        </div>
-    </div>
-    @if(templates.Count() < 1) {
-        <div class="row">
-            <div class="col text-center py-5">
-                <div class="text-muted">
-                    <i class="bi bi-inbox" style="font-size: 4rem;"></i>
-                    <h4 class="mt-3">No Templates Found...</h4>
-                </div>
+        <div class="row mb-4">
+            <div class="col text-center">
+                <h2 class="mb-3 bo-text-color">Templates</h2>
             </div>
         </div>
-    }
-    else {
-        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-            @foreach (TemplateResponseModel temp in templates) {
-                <div class="col">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-header bg-dark">
-                            <h5 class="card-title text-white">@temp.name</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text">
-                                <strong>Template System:</strong> @temp.system<br>
-                            </p>
-                        </div>
-                        <div class="card-footer bg-dark">
-                            <div>
-                                <button type="button" class="btn btn-secondary text-white rounded" style="border: none;" @onclick="((async) => OpenTemplateDetails(temp.id.ToString()))">Template Details</button>
+        @if (templates.Count() < 1)
+        {
+            <div class="row">
+                <div class="col text-center py-5">
+                    <div class="text-muted">
+                        <i class="bi bi-inbox" style="font-size: 4rem;"></i>
+                        <h4 class="mt-3">No Templates Found...</h4>
+                    </div>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                @foreach (TemplateResponseModel temp in templates)
+                {
+                    <div class="col">
+                        <div class="card h-100 shadow-sm">
+                            <div class="card-header bg-dark">
+                                <h5 class="card-title text-white">@temp.name</h5>
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <strong>Template System:</strong> @temp.system<br>
+                                </p>
+                            </div>
+                            <div class="card-footer bg-dark">
+                                <div>
+                                    <button type="button" class="submitButton" style="border: none;" @onclick="((async) => OpenTemplateDetails(temp.id.ToString()))">Template Details</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            }   
-        </div>
-    }
-   
-</div>
+                }
+            </div>
+        }
 
-<div class="modal fade @_dialogCssForDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    </div>
+
+    <div class="modal fade @_dialogCssForDetail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-dark">
@@ -114,11 +117,13 @@
                     </p>
                 </div>
                 <div class="modal-footer bg-dark">
-                    <button type="button" class="btn btn-secondary text-white" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)">Close</button>
+                    <button type="button" class="submitButton" @onclick="() => this.CloseDialog(ref _dialogOpenDetail)">Close</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
 
 
 @code {
