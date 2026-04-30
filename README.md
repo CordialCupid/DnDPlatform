@@ -1,6 +1,6 @@
 # DnD Platform
 
-A web application for creating and managing D&D character sheets, with versioning, templates, and D&D 5e data integration.
+A web application for creating and managing D&D character sheets, with versioning and campaign templates.
 
 ## Stack
 
@@ -49,7 +49,7 @@ Frontend runs on `http://localhost:5252`.
 
 ```
 src/
-├── DnDPlatform.Server        # ASP.NET Core API — controllers, auth, middleware
+├── DnDPlatform.Server        # ASP.NET Core API - controllers, auth, middleware
 ├── DnDPlatform.Frontend      # Blazor WASM frontend
 ├── DnDPlatform.Services      # Business logic
 ├── DnDPlatform.Repositories  # EF Core data access
@@ -71,16 +71,9 @@ All endpoints except `/api/auth/*` require a `Authorization: Bearer <token>` hea
 | PUT | `/api/characters/{id}/sheet` | Save sheet data |
 | POST | `/api/characters/{id}/snapshot` | Create a named snapshot |
 | GET | `/api/characters/{id}/versions` | List version history |
-| POST | `/api/characters/{id}/revert/{version}` | Revert to a version |
-| GET | `/api/characters/{id}/export` | Export as text file |
-| DELETE | `/api/characters/{id}` | Delete a character |
 | GET | `/api/templates` | List templates |
 | GET | `/api/templates/{id}` | Get a template |
 | POST | `/api/templates` | Create a template |
-| GET | `/api/dnd5e/classes` | D&D 5e classes |
-| GET | `/api/dnd5e/spells` | D&D 5e spells (supports `?filter=`) |
-| GET | `/api/dnd5e/equipment` | D&D 5e equipment |
-| GET | `/api/dnd5e/ability-scores` | D&D 5e ability scores |
 
 ### Sheet data format
 
