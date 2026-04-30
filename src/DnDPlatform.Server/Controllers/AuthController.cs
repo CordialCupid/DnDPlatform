@@ -15,7 +15,6 @@ public class AuthController : ControllerBase
         _authService    = authService;
     }
 
-    //endpoint for registering new account
     [HttpPost("register")]
     public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
     {
@@ -23,7 +22,6 @@ public class AuthController : ControllerBase
         return Ok(response);
     }
 
-    // endpoint for logging in
     [HttpPost("login")]
     public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
     {

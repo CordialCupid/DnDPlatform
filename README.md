@@ -71,6 +71,7 @@ All endpoints except `/api/auth/*` require a `Authorization: Bearer <token>` hea
 | PUT | `/api/characters/{id}/sheet` | Save sheet data |
 | POST | `/api/characters/{id}/snapshot` | Create a named snapshot |
 | GET | `/api/characters/{id}/versions` | List version history |
+| DELETE | `/api/characters/{id}` | Delete a character |
 | GET | `/api/templates` | List templates |
 | GET | `/api/templates/{id}` | Get a template |
 | POST | `/api/templates` | Create a template |

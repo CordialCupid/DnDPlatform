@@ -39,7 +39,6 @@ public class EfCharacterSheetRepository : ICharacterSheetRepository
 
         var max = await _db.CharacterSheets.Where(s => s.CharacterId == characterId).MaxAsync(s => (int?)s.VersionNumber);
 
-        // if max return as null, set it to 0. Always increment
         return (max ?? 0) + 1;
     }
 }
