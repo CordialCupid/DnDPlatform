@@ -89,3 +89,14 @@ The `sheetData` field in `PUT /api/characters/{id}/sheet` expects a **JSON strin
 `src/DnDPlatform.Server/appsettings.json` controls the database connection and JWT settings. The defaults match the Docker Compose setup and are fine for local development.
 
 For production, override `Jwt:Key` with a secure secret (min 32 chars) and update the connection string.
+
+## AI Disclosure
+
+AI tools (Claude, GitHub Copilot) were used during development of this project in the following ways:
+
+- **Version control** - helped write commit messages and kept the git history clean across multiple contributors
+- **Code cleanup** - identified redundant comments, dead code, and minor logic issues during review passes
+- **JSONB structuring** - helped us understand how to model flexible character sheet data as JSONB in PostgreSQL and how to deserialize schema definitions at validation time
+- **Learning concepts** - used as a reference while learning ASP.NET Core 9, Blazor WASM, and Entity Framework Core patterns like the repository abstraction and event bus setup
+
+All design decisions, architecture, and implementation were made by the team. AI was not used to generate the codebase wholesale.
