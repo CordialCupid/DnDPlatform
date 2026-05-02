@@ -17,22 +17,18 @@ public class TemplatesController : AuthorizedControllerBase
         _templateService = templateService;
     }
 
-    // endpoint to get all templates
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TemplateDto>>> GetAll([FromQuery] string? system)
-    {  
+    {
         return Ok(await _templateService.GetTemplatesAsync(system));
     }
 
-
-    // endpoint to retireve specific templates by id
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<TemplateDto>> GetById(Guid id)
     {
         return Ok(await _templateService.GetTemplateAsync(id));
     }
 
-    // endpoint to create a template
     [HttpPost]
     public async Task<ActionResult<TemplateDto>> Create(CreateTemplateRequest request)
     {

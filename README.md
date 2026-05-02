@@ -1,6 +1,6 @@
 # DnD Platform
 
-A web application for creating and managing D&D character sheets, with versioning, templates, and D&D 5e data integration.
+A web application for creating and managing D&D character sheets, with versioning and campaign templates.
 
 ## Stack
 
@@ -49,7 +49,7 @@ Frontend runs on `http://localhost:5252`.
 
 ```
 src/
-├── DnDPlatform.Server        # ASP.NET Core API — controllers, auth, middleware
+├── DnDPlatform.Server        # ASP.NET Core API - controllers, auth, middleware
 ├── DnDPlatform.Frontend      # Blazor WASM frontend
 ├── DnDPlatform.Services      # Business logic
 ├── DnDPlatform.Repositories  # EF Core data access
@@ -71,16 +71,10 @@ All endpoints except `/api/auth/*` require a `Authorization: Bearer <token>` hea
 | PUT | `/api/characters/{id}/sheet` | Save sheet data |
 | POST | `/api/characters/{id}/snapshot` | Create a named snapshot |
 | GET | `/api/characters/{id}/versions` | List version history |
-| POST | `/api/characters/{id}/revert/{version}` | Revert to a version |
-| GET | `/api/characters/{id}/export` | Export as text file |
 | DELETE | `/api/characters/{id}` | Delete a character |
 | GET | `/api/templates` | List templates |
 | GET | `/api/templates/{id}` | Get a template |
 | POST | `/api/templates` | Create a template |
-| GET | `/api/dnd5e/classes` | D&D 5e classes |
-| GET | `/api/dnd5e/spells` | D&D 5e spells (supports `?filter=`) |
-| GET | `/api/dnd5e/equipment` | D&D 5e equipment |
-| GET | `/api/dnd5e/ability-scores` | D&D 5e ability scores |
 
 ### Sheet data format
 
@@ -95,3 +89,14 @@ The `sheetData` field in `PUT /api/characters/{id}/sheet` expects a **JSON strin
 `src/DnDPlatform.Server/appsettings.json` controls the database connection and JWT settings. The defaults match the Docker Compose setup and are fine for local development.
 
 For production, override `Jwt:Key` with a secure secret (min 32 chars) and update the connection string.
+
+## AI Disclosure
+
+AI tools (Claude, GitHub Copilot) were used during development of this project in the following ways:
+
+- **Version control** - helped write commit messages and kept the git history clean across multiple contributors
+- **Code cleanup** - identified redundant comments, dead code, and minor logic issues during review passes
+- **JSONB structuring** - helped us understand how to model flexible character sheet data as JSONB in PostgreSQL and how to deserialize schema definitions at validation time
+- **Learning concepts** - used as a reference while learning ASP.NET Core 9, Blazor WASM, and Entity Framework Core patterns like the repository abstraction and event bus setup
+
+All design decisions, architecture, and implementation were made by the team. AI was not used to generate the codebase wholesale.

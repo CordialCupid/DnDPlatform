@@ -69,7 +69,6 @@ public class TemplateService : ITemplateService
         return MapToDto(saved);
     }
 
-    // method to compaure the schema defined in the template and the modifications passed in by the user
     public async Task<SheetValidationResult> ValidateSheetAsync(Guid templateId, string sheetBlob)
     {
         int num;

@@ -115,7 +115,6 @@ public class VersionSnapshotManager : IVersionSnapshotManager
         });
     }
 
-    // method to ensure the passed in user id actually owns the pased in character id character
     private async Task EnsureOwnershipAsync(Guid userId, Guid characterId)
     {
         var character = await _characterRepo.GetByIdAsync(characterId);
